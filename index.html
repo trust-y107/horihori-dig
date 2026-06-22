@@ -117,6 +117,7 @@
   .barOuter{flex:1; height:14px; background:#00000044; border-radius:999px; overflow:hidden;}
   .barInner{height:100%; width:100%; background:linear-gradient(90deg,#ffd24d,#ff8a3d); transition:width .2s;}
   .staminaRow .lab{font-size:12px; color:var(--sub); min-width:54px;}
+  .staminaRow.energyOn .barInner{background:linear-gradient(90deg,#5ad17b,#3fb0ff); box-shadow:0 0 10px #5ad17b;}
   /* 採掘道具バー */
   .toolBar{display:flex; gap:6px; padding:2px 14px 12px;}
   .toolBtn{flex:1; background:var(--panel2); border:1px solid #ffffff10; border-radius:12px;
@@ -127,11 +128,10 @@
   .toolBtn .tn{font-size:9px; font-weight:700; color:var(--sub);}
   .toolBtn .tc{font-size:10px; font-weight:800; color:var(--gold);}
   .digField.shovelOn{box-shadow:inset 0 0 0 3px var(--gold), inset 0 4px 14px #000a;}
-  .detectRing{position:absolute; width:74px; height:74px; transform:translate(-50%,-50%);
-    border:4px solid #ffe06a; border-radius:50%; pointer-events:none;
-    box-shadow:0 0 18px #ffd24d, inset 0 0 12px #ffd24d88; animation:detectPulse 1s ease-in-out infinite;}
-  @keyframes detectPulse{0%,100%{transform:translate(-50%,-50%) scale(.8); opacity:.55}
-    50%{transform:translate(-50%,-50%) scale(1.15); opacity:1}}
+  .digField.detectorOn{box-shadow:inset 0 0 0 3px #ffe06a, inset 0 4px 14px #000a;}
+  .digField.dynamiteOn{box-shadow:inset 0 0 0 3px #ff5a3c, inset 0 4px 14px #000a; cursor:crosshair;}
+  .detectDot{position:fixed; width:30px; height:30px; border-radius:50%; pointer-events:none; z-index:45;
+    transform:translate(-50%,-50%); opacity:.9; transition:background .08s, box-shadow .08s, transform .08s;}
   /* ===== クリーニング画面 ===== */
   #cleanScreen{display:none; flex-direction:column; align-items:center; justify-content:center; padding:14px;}
   #cleanScreen.active{display:flex;}
@@ -255,7 +255,7 @@
     <div class="toolBar">
       <button class="toolBtn" onclick="useTool('detector')"><span class="ti">🔍</span><span class="tn">探知機</span><span class="tc">5🪙</span></button>
       <button class="toolBtn" onclick="useTool('shovel')"><span class="ti">🥄</span><span class="tn">大スコップ</span><span class="tc">10🪙</span></button>
-      <button class="toolBtn" onclick="useTool('energy')"><span class="ti">🥤</span><span class="tn">エナジー</span><span class="tc">15🪙</span></button>
+      <button class="toolBtn" onclick="useTool('energy')"><span class="ti">🥤</span><span class="tn">エナジー</span><span class="tc">20🪙</span></button>
       <button class="toolBtn" onclick="useTool('dynamite')"><span class="ti">🧨</span><span class="tn">ダイナマイト</span><span class="tc">30🪙</span></button>
     </div>
   </section>
@@ -510,9 +510,11 @@ function startDig(site){
   document.querySelector('nav').style.display='none';
   document.getElementById('digSiteName').textContent=site.name;
   buildDigField();
-  bigShovel=false;
-  document.getElementById('digField').classList.remove('shovelOn');
-  const _dr=document.getElementById('detectRing'); if(_dr) _dr.style.display='none';
+  bigShovel=false; detectorActive=false; dynamiteArmed=false; energyActive=false;
+  document.getElementById('digField').classList.remove('shovelOn','detectorOn','dynamiteOn');
+  document.querySelector('.staminaRow').classList.remove('energyOn');
+  const _dd=document.getElementById('detectDot'); if(_dd) _dd.style.display='none';
+  clearTimeout(window._detT); clearTimeout(window._enT);
   updateStamina();
 }
 
@@ -587,7 +589,7 @@ function digAt(clientX, clientY){
   vibrate(8); digSound();
   rippleAt(clientX,clientY);
   spawnAt(clientX,clientY,'💨');
-  stamina=Math.max(0, stamina-4); updateStamina();
+  if(!energyActive){ stamina=Math.max(0, stamina-4); } updateStamina();
   const dist=Math.hypot(x-digItemX, y-digItemY);
   const find=currentDiff.find*(bigShovel?1.6:1), depth=currentDiff.depth;
   if(dist<find){
@@ -627,9 +629,16 @@ function rippleAt(clientX,clientY){
 function bindDig(){
   const cv=document.getElementById('digCanvas');
   const pos=e=>{ const p=e.touches?e.touches[0]:e; return {x:p.clientX,y:p.clientY}; };
-  cv.addEventListener('pointerdown', e=>{ digging=true; const p=pos(e); lastDX=p.x; lastDY=p.y; digAt(p.x,p.y); e.preventDefault(); });
-  cv.addEventListener('pointermove', e=>{ if(!digging)return; const p=pos(e);
-    if(Math.hypot(p.x-lastDX,p.y-lastDY)<16) return; lastDX=p.x; lastDY=p.y; digAt(p.x,p.y); e.preventDefault(); });
+  cv.addEventListener('pointerdown', e=>{ const p=pos(e); e.preventDefault();
+    if(dynamiteArmed){ explodeAt(p.x,p.y); return; }      // 爆破地点を選ぶ
+    digging=true; lastDX=p.x; lastDY=p.y;
+    if(detectorActive){ detectScan(p.x,p.y); return; }     // なぞって探す
+    digAt(p.x,p.y);
+  });
+  cv.addEventListener('pointermove', e=>{ if(!digging)return; const p=pos(e); e.preventDefault();
+    if(detectorActive){ detectScan(p.x,p.y); lastDX=p.x; lastDY=p.y; return; }
+    if(Math.hypot(p.x-lastDX,p.y-lastDY)<16) return; lastDX=p.x; lastDY=p.y; digAt(p.x,p.y);
+  });
   window.addEventListener('pointerup', ()=>{ digging=false; });
 }
 
@@ -637,9 +646,24 @@ function bindDig(){
 const TOOLS={
   detector:{name:'探知機',  cost:5},
   shovel:  {name:'大スコップ',cost:10},
-  energy:  {name:'エナジー', cost:15},
+  energy:  {name:'エナジー', cost:20},
   dynamite:{name:'ダイナマイト',cost:30},
 };
+let detectorActive=false, dynamiteArmed=false, energyActive=false, lastBeep=0;
+
+// 道具っぽい効果音
+function detectorOnSound(){ tone(700,0,0.07,0.18,'square'); tone(1000,0.09,0.1,0.18,'square'); }
+function detectorBeep(close){
+  const now=performance.now();
+  if(now-lastBeep < (420 - close*350)) return; // 近いほど速く鳴る
+  lastBeep=now;
+  tone(440+close*1100, 0, 0.07, 0.16, 'square');
+}
+function shovelSound(){ noiseBurst(0.24, 420, 0.45); noiseBurst(0.12, 700, 0.2); }
+function energySound(){ [600,820,1040,1320].forEach((f,i)=>tone(f,i*0.07,0.2,0.16,'square')); noiseBurst(0.3,5000,0.05); }
+function fuseSound(){ noiseBurst(0.5, 2800, 0.07); }
+function explosionSound(){ noiseBurst(0.55,150,0.6); noiseBurst(0.3,80,0.45); }
+
 function useTool(type){
   if(digRevealed) return;
   const t=TOOLS[type];
@@ -649,36 +673,87 @@ function useTool(type){
   vibrate(20);
   if(type==='detector') activateDetector();
   else if(type==='shovel') activateShovel();
-  else if(type==='energy'){ stamina=getMaxStamina(); updateStamina(); chime(); toast('エナジードリンク！スタミナ全回復⚡'); }
-  else if(type==='dynamite') useDynamite();
+  else if(type==='energy') activateEnergy();
+  else if(type==='dynamite') armDynamite();
 }
-// 探知機：10秒間お宝の場所が光る
+
+// 探知機：10秒間、地面をなぞるとお宝に近いほど速く高く鳴る
 function activateDetector(){
+  detectorActive=true; dynamiteArmed=false;
   const f=document.getElementById('digField');
-  let ring=document.getElementById('detectRing');
-  if(!ring){ ring=document.createElement('div'); ring.id='detectRing'; ring.className='detectRing'; f.appendChild(ring); }
-  ring.style.left=(digItemX/320*100)+'%';
-  ring.style.top=(digItemY/320*100)+'%';
-  ring.style.display='block';
-  hintSound(); toast('探知機ON！10秒間お宝の場所が光る🔍');
+  f.classList.remove('dynamiteOn'); f.classList.add('detectorOn');
+  detectorOnSound();
+  toast('探知機ON！地面をなぞってお宝をさがそう🔍（10秒）');
   clearTimeout(window._detT);
-  window._detT=setTimeout(()=>{ const r=document.getElementById('detectRing'); if(r) r.style.display='none'; },10000);
+  window._detT=setTimeout(()=>{
+    detectorActive=false;
+    document.getElementById('digField').classList.remove('detectorOn');
+    const d=document.getElementById('detectDot'); if(d) d.style.display='none';
+    toast('探知機OFF');
+  },10000);
+}
+// なぞった位置でお宝への近さに反応（音＋色）
+function detectScan(clientX, clientY){
+  const r=digCanvas.getBoundingClientRect();
+  const x=(clientX-r.left)*(digCanvas.width/r.width);
+  const y=(clientY-r.top)*(digCanvas.height/r.height);
+  const dist=Math.hypot(x-digItemX, y-digItemY);
+  const close=Math.max(0, 1 - dist/200);   // 0=遠い 1=真上
+  detectorBeep(close);
+  let d=document.getElementById('detectDot');
+  if(!d){ d=document.createElement('div'); d.id='detectDot'; d.className='detectDot'; document.body.appendChild(d); }
+  const hue=200 - close*200;               // 青(遠)→赤(近)
+  d.style.display='block';
+  d.style.left=clientX+'px'; d.style.top=clientY+'px';
+  d.style.background=`hsl(${hue},90%,55%)`;
+  d.style.boxShadow=`0 0 ${6+close*24}px hsl(${hue},90%,55%)`;
+  d.style.transform=`translate(-50%,-50%) scale(${0.7+close})`;
+  if(close>0.9) spawnAt(clientX,clientY,'❗');
+}
+// エナジードリンク：10秒間スタミナが減らない
+function activateEnergy(){
+  energyActive=true;
+  energySound();
+  document.querySelector('.staminaRow').classList.add('energyOn');
+  toast('エナジードリンク！10秒間スタミナが減らない⚡');
+  clearTimeout(window._enT);
+  window._enT=setTimeout(()=>{
+    energyActive=false;
+    document.querySelector('.staminaRow').classList.remove('energyOn');
+    toast('エナジー切れ');
+  },10000);
 }
 // 大スコップ：この発掘の間だけ大きく＆2倍掘れる
 function activateShovel(){
   bigShovel=true;
   document.getElementById('digField').classList.add('shovelOn');
+  shovelSound();
   toast('大きいスコップ！大きく掘れる🥄');
 }
-// ダイナマイト：一気に掘ってすぐ出土
-function useDynamite(){
-  noiseBurst(0.45,180,0.5);
-  burst(); vibrate([40,60,40]);
-  for(let i=0;i<8;i++){ const a=i/8*6.283; paintHole(digItemX+Math.cos(a)*48, digItemY+Math.sin(a)*48, 38); }
-  paintHole(digItemX,digItemY,95);
-  digItemHits=currentDiff.depth; digRevealed=true;
-  toast('ダイナマイト！ドカーン💥');
-  finishDig(null,null);
+// ダイナマイト：爆破する場所をタップ → 広範囲を掘る
+function armDynamite(){
+  dynamiteArmed=true; detectorActive=false;
+  const f=document.getElementById('digField');
+  f.classList.remove('detectorOn'); f.classList.add('dynamiteOn');
+  fuseSound();
+  toast('ダイナマイト！爆破する場所をタップ💣');
+}
+function explodeAt(clientX, clientY){
+  dynamiteArmed=false;
+  document.getElementById('digField').classList.remove('dynamiteOn');
+  const r=digCanvas.getBoundingClientRect();
+  const x=(clientX-r.left)*(digCanvas.width/r.width);
+  const y=(clientY-r.top)*(digCanvas.height/r.height);
+  explosionSound(); burst(); vibrate([50,80,50]); rippleAt(clientX,clientY);
+  const R=82;
+  paintHole(x,y,R+18);
+  for(let i=0;i<10;i++){ const a=i/10*6.283; paintHole(x+Math.cos(a)*R*0.55, y+Math.sin(a)*R*0.55, 40); }
+  spawnAt(clientX,clientY,'💥');
+  if(Math.hypot(x-digItemX, y-digItemY) < R+12){
+    digRevealed=true; finishDig(clientX,clientY);   // 爆風内にお宝 → 出土
+  } else {
+    toast('ここにはお宝が無かった…💨');
+  }
 }
 
 function updateStamina(){
