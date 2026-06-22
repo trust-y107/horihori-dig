@@ -58,6 +58,10 @@
   .site .lock{position:absolute; inset:0; background:#000000aa; backdrop-filter:blur(2px);
     display:flex; align-items:center; justify-content:center; flex-direction:column; gap:4px; font-weight:700;}
   .site .lock small{font-weight:500; opacity:.8;}
+  .site .unlockBtn{margin-top:9px; background:linear-gradient(180deg,var(--gold),#f0a93d); color:#3a2400;
+    font-weight:800; border:none; border-radius:999px; padding:9px 22px; font-size:14px; box-shadow:0 3px 0 #b9791f;}
+  .site .unlockBtn:active{transform:translateY(2px); box-shadow:0 1px 0 #b9791f;}
+  .site .unlockBtn.cant{background:#5a4a32; color:#cbb990; box-shadow:0 3px 0 #00000033;}
   /* ===== 発掘画面 ===== */
   #digScreen{padding:0; position:relative;}
   .digTop{padding:10px 14px 4px; display:flex; align-items:center; justify-content:space-between;}
@@ -113,6 +117,21 @@
   .barOuter{flex:1; height:14px; background:#00000044; border-radius:999px; overflow:hidden;}
   .barInner{height:100%; width:100%; background:linear-gradient(90deg,#ffd24d,#ff8a3d); transition:width .2s;}
   .staminaRow .lab{font-size:12px; color:var(--sub); min-width:54px;}
+  /* 採掘道具バー */
+  .toolBar{display:flex; gap:6px; padding:2px 14px 12px;}
+  .toolBtn{flex:1; background:var(--panel2); border:1px solid #ffffff10; border-radius:12px;
+    color:var(--text); padding:7px 2px 6px; display:flex; flex-direction:column; align-items:center; gap:1px;
+    box-shadow:0 2px 0 #00000044;}
+  .toolBtn:active{transform:translateY(2px); box-shadow:0 0 0 #0000;}
+  .toolBtn .ti{font-size:20px; line-height:1;}
+  .toolBtn .tn{font-size:9px; font-weight:700; color:var(--sub);}
+  .toolBtn .tc{font-size:10px; font-weight:800; color:var(--gold);}
+  .digField.shovelOn{box-shadow:inset 0 0 0 3px var(--gold), inset 0 4px 14px #000a;}
+  .detectRing{position:absolute; width:74px; height:74px; transform:translate(-50%,-50%);
+    border:4px solid #ffe06a; border-radius:50%; pointer-events:none;
+    box-shadow:0 0 18px #ffd24d, inset 0 0 12px #ffd24d88; animation:detectPulse 1s ease-in-out infinite;}
+  @keyframes detectPulse{0%,100%{transform:translate(-50%,-50%) scale(.8); opacity:.55}
+    50%{transform:translate(-50%,-50%) scale(1.15); opacity:1}}
   /* ===== クリーニング画面 ===== */
   #cleanScreen{display:none; flex-direction:column; align-items:center; justify-content:center; padding:14px;}
   #cleanScreen.active{display:flex;}
@@ -232,6 +251,12 @@
     <div class="staminaRow">
       <span class="lab">スタミナ</span>
       <div class="barOuter"><div class="barInner" id="staminaBar"></div></div>
+    </div>
+    <div class="toolBar">
+      <button class="toolBtn" onclick="useTool('detector')"><span class="ti">🔍</span><span class="tn">探知機</span><span class="tc">5🪙</span></button>
+      <button class="toolBtn" onclick="useTool('shovel')"><span class="ti">🥄</span><span class="tn">大スコップ</span><span class="tc">10🪙</span></button>
+      <button class="toolBtn" onclick="useTool('energy')"><span class="ti">🥤</span><span class="tn">エナジー</span><span class="tc">15🪙</span></button>
+      <button class="toolBtn" onclick="useTool('dynamite')"><span class="ti">🧨</span><span class="tn">ダイナマイト</span><span class="tc">30🪙</span></button>
     </div>
   </section>
 
@@ -389,7 +414,8 @@ function renderHome(){
   const list = document.getElementById('siteList');
   list.innerHTML='';
   SITES.forEach(site=>{
-    const locked = state.coins < site.unlock && !isUnlocked(site);
+    const unlocked = isUnlocked(site);
+    const canAfford = state.coins >= site.unlock;
     const el = document.createElement('div');
     el.className='site';
     el.style.background = site.grad;
@@ -397,10 +423,15 @@ function renderHome(){
       <div class="emoji">${site.emoji}</div>
       <h3>${site.name}</h3>
       <p>${site.desc}</p>
-      <div class="go">掘る ⛏️</div>
-      ${locked?`<div class="lock">🔒 コイン ${site.unlock} で解放<small>あと ${site.unlock-state.coins} 🪙</small></div>`:''}
+      ${unlocked ? `<div class="go">掘る ⛏️</div>` : `
+        <div class="lock">
+          <div>🔒 ${site.unlock} 🪙 で解放</div>
+          <button class="unlockBtn ${canAfford?'':'cant'}" onclick="unlockSite('${site.id}')">
+            ${canAfford ? '解放する' : ('あと '+(site.unlock-state.coins)+' 🪙')}
+          </button>
+        </div>`}
     `;
-    if(!locked){ el.onclick=()=>startDig(site); }
+    if(unlocked){ el.onclick=()=>startDig(site); }
     list.appendChild(el);
   });
   // スタミナ強化パネル
@@ -422,16 +453,28 @@ function upgradeStamina(){
   fanfare(); toast('スタミナ Lv.'+(lv+1)+'にアップ！⚡');
   renderHome();
 }
-// 一度でも何か掘った場所は解放扱い（再ロック防止）
+// 解放済みか？（unlock=0は最初から。購入で解放、一度解放したら永続）
 function isUnlocked(site){
   if(site.unlock===0) return true;
+  if(state.unlockedSites && state.unlockedSites[site.id]) return true;
+  // 旧データ救済：すでに掘った場所は解放扱い
   return state.collected && Object.keys(state.collected).some(k=>k.startsWith(site.id+"::"));
+}
+// コインを払って採掘場を解放する
+function unlockSite(id){
+  const site=SITES.find(s=>s.id===id);
+  if(state.coins < site.unlock){ toast('コインが足りない（'+site.unlock+'🪙ひつよう）'); return; }
+  state.coins-=site.unlock;
+  if(!state.unlockedSites) state.unlockedSites={};
+  state.unlockedSites[id]=true;
+  save(); fanfare(); toast(site.name+'を解放した！🎉');
+  renderHome();
 }
 
 // ===== 発掘ロジック =====
 let currentSite=null, buriedItem=null, stamina=100;
 let digCanvas=null, digCtx=null, digItemX=0, digItemY=0, digRevealed=false, digging=false, lastDX=-99, lastDY=-99;
-let digItemHits=0, currentSoil=null, currentDiff=null;
+let digItemHits=0, currentSoil=null, currentDiff=null, bigShovel=false;
 
 // 採掘場ごとの土の色・テクスチャ
 const SOIL = {
@@ -467,6 +510,9 @@ function startDig(site){
   document.querySelector('nav').style.display='none';
   document.getElementById('digSiteName').textContent=site.name;
   buildDigField();
+  bigShovel=false;
+  document.getElementById('digField').classList.remove('shovelOn');
+  const _dr=document.getElementById('detectRing'); if(_dr) _dr.style.display='none';
   updateStamina();
 }
 
@@ -533,38 +579,41 @@ function hexA(hex,a){
 // 指定座標を掘る
 function digAt(clientX, clientY){
   if(digRevealed) return;
-  if(stamina<=0){ toast('スタミナ切れ…強化するか少し待ってね'); return; }
+  if(stamina<=0){ toast('スタミナ切れ…強化やエナジードリンクを使ってね'); return; }
   const r=digCanvas.getBoundingClientRect();
   const x=(clientX-r.left)*(digCanvas.width/r.width);
   const y=(clientY-r.top)*(digCanvas.height/r.height);
-  paintHole(x,y,34);
+  paintHole(x,y, bigShovel?58:34);  // 大スコップで穴が大きく
   vibrate(8); digSound();
   rippleAt(clientX,clientY);
   spawnAt(clientX,clientY,'💨');
   stamina=Math.max(0, stamina-4); updateStamina();
   const dist=Math.hypot(x-digItemX, y-digItemY);
-  const find=currentDiff.find, depth=currentDiff.depth;
+  const find=currentDiff.find*(bigShovel?1.6:1), depth=currentDiff.depth;
   if(dist<find){
-    // お宝の真上！ 深いほど何度も掘る必要がある
-    digItemHits++;
+    // お宝の真上！ 深いほど何度も掘る必要がある（大スコップは2倍掘れる）
+    digItemHits += bigShovel?2:1;
     paintHole(digItemX, digItemY, 28+digItemHits*9);
     if(digItemHits>=depth){
-      digRevealed=true;
-      paintHole(digItemX,digItemY,52);
-      document.getElementById('digReveal').classList.add('show');
-      vibrate([20,40,30]); chime();
-      spawnAt(clientX,clientY,'✨');
-      setTimeout(()=>goClean(), 650);
+      digRevealed=true; finishDig(clientX,clientY);
     } else {
       // まだ深い…手ごたえあり
       vibrate(18); hintSound();
       spawnAt(clientX,clientY,'✨');
-      if(digItemHits===1 && depth>1) toast('なにか手ごたえ…もっと掘って！');
+      if(digItemHits<=1 && depth>1) toast('なにか手ごたえ…もっと掘って！');
     }
   } else if(dist<find+56 && Math.random()<0.5){
     // 近い！ヒント
     spawnAt(clientX,clientY,'✨'); hintSound();
   }
+}
+// 発掘完了 → お掃除へ（通常もダイナマイトもここを通る）
+function finishDig(clientX,clientY){
+  paintHole(digItemX,digItemY,54);
+  document.getElementById('digReveal').classList.add('show');
+  vibrate([20,40,30]); chime();
+  if(clientX!=null) spawnAt(clientX,clientY,'✨');
+  setTimeout(()=>goClean(), 700);
 }
 // 波紋エフェクト
 function rippleAt(clientX,clientY){
@@ -582,6 +631,54 @@ function bindDig(){
   cv.addEventListener('pointermove', e=>{ if(!digging)return; const p=pos(e);
     if(Math.hypot(p.x-lastDX,p.y-lastDY)<16) return; lastDX=p.x; lastDY=p.y; digAt(p.x,p.y); e.preventDefault(); });
   window.addEventListener('pointerup', ()=>{ digging=false; });
+}
+
+// ===== 採掘道具（買ったその場で1回使用） =====
+const TOOLS={
+  detector:{name:'探知機',  cost:5},
+  shovel:  {name:'大スコップ',cost:10},
+  energy:  {name:'エナジー', cost:15},
+  dynamite:{name:'ダイナマイト',cost:30},
+};
+function useTool(type){
+  if(digRevealed) return;
+  const t=TOOLS[type];
+  if(state.coins < t.cost){ toast(t.name+'にはコインが足りない（'+t.cost+'🪙）'); return; }
+  state.coins-=t.cost; save();
+  document.getElementById('coinNum').textContent=state.coins;
+  vibrate(20);
+  if(type==='detector') activateDetector();
+  else if(type==='shovel') activateShovel();
+  else if(type==='energy'){ stamina=getMaxStamina(); updateStamina(); chime(); toast('エナジードリンク！スタミナ全回復⚡'); }
+  else if(type==='dynamite') useDynamite();
+}
+// 探知機：10秒間お宝の場所が光る
+function activateDetector(){
+  const f=document.getElementById('digField');
+  let ring=document.getElementById('detectRing');
+  if(!ring){ ring=document.createElement('div'); ring.id='detectRing'; ring.className='detectRing'; f.appendChild(ring); }
+  ring.style.left=(digItemX/320*100)+'%';
+  ring.style.top=(digItemY/320*100)+'%';
+  ring.style.display='block';
+  hintSound(); toast('探知機ON！10秒間お宝の場所が光る🔍');
+  clearTimeout(window._detT);
+  window._detT=setTimeout(()=>{ const r=document.getElementById('detectRing'); if(r) r.style.display='none'; },10000);
+}
+// 大スコップ：この発掘の間だけ大きく＆2倍掘れる
+function activateShovel(){
+  bigShovel=true;
+  document.getElementById('digField').classList.add('shovelOn');
+  toast('大きいスコップ！大きく掘れる🥄');
+}
+// ダイナマイト：一気に掘ってすぐ出土
+function useDynamite(){
+  noiseBurst(0.45,180,0.5);
+  burst(); vibrate([40,60,40]);
+  for(let i=0;i<8;i++){ const a=i/8*6.283; paintHole(digItemX+Math.cos(a)*48, digItemY+Math.sin(a)*48, 38); }
+  paintHole(digItemX,digItemY,95);
+  digItemHits=currentDiff.depth; digRevealed=true;
+  toast('ダイナマイト！ドカーン💥');
+  finishDig(null,null);
 }
 
 function updateStamina(){
