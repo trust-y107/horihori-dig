@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#3b2a1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ほりほり発掘コレクション</title>
+<style>
+  :root{
+    --bg:#2a1f14; --panel:#3a2b1b; --panel2:#4a3825;
+    --dirt1:#7a5230; --dirt2:#8a6038; --dirt3:#6b4626;
+    --gold:#ffcc4d; --text:#f5ecd9; --sub:#c9b79a;
+    --common:#9aa0a6; --rare:#4fa3ff; --epic:#b46bff; --legend:#ffb13d;
+    --ok:#5ad17b; --shadow:rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none;}
+  html,body{margin:0; height:100%;}
+  body{
+    font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:radial-gradient(circle at 50% -10%, #4a3522, #241a10 70%);
+    color:var(--text); overflow:hidden; touch-action:manipulation;
+  }
+  #app{
+    max-width:480px; margin:0 auto; height:100dvh; position:relative;
+    display:flex; flex-direction:column; overflow:hidden;
+    padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
+  }
+  /* ===== ヘッダー ===== */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; gap:8px;
+  }
+  .title{font-weight:800; font-size:17px; letter-spacing:.5px; display:flex; align-items:center; gap:6px;}
+  .coins{
+    background:var(--panel); border:1px solid #00000033; border-radius:999px;
+    padding:6px 12px; font-weight:700; font-size:14px; display:flex; align-items:center; gap:5px;
+    box-shadow:0 2px 0 #00000022;
+  }
+  /* ===== 画面共通 ===== */
+  .screen{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:6px 14px 90px; display:none;}
+  .screen.active{display:block;}
+  h2.sec{font-size:15px; margin:14px 2px 8px; color:var(--sub);}
+  /* ===== ホーム：採掘場カード ===== */
+  .site{
+    position:relative; border-radius:18px; padding:16px; margin-bottom:14px;
+    color:#fff; overflow:hidden; box-shadow:0 6px 16px var(--shadow);
+    border:1px solid #ffffff22;
+  }
+  .site .emoji{font-size:42px; filter:drop-shadow(0 2px 2px #0005);}
+  .site h3{margin:6px 0 2px; font-size:19px; font-weight:800; text-shadow:0 1px 2px #0007;}
+  .site p{margin:0; font-size:12.5px; opacity:.92; text-shadow:0 1px 2px #0006;}
+  .site .go{
+    position:absolute; right:14px; bottom:14px; background:#ffffffee; color:#222;
+    font-weight:800; font-size:13px; padding:9px 16px; border-radius:999px;
+    box-shadow:0 3px 0 #0003;
+  }
+  .site .lock{position:absolute; inset:0; background:#000000aa; backdrop-filter:blur(2px);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:4px; font-weight:700;}
+  .site .lock small{font-weight:500; opacity:.8;}
+  /* ===== 発掘画面 ===== */
+  #digScreen{padding:0; position:relative;}
+  .digTop{padding:10px 14px 4px; display:flex; align-items:center; justify-content:space-between;}
+  .backBtn{background:var(--panel); border:none; color:var(--text); font-weight:700;
+    padding:8px 14px; border-radius:999px; font-size:14px;}
+  .digHint{text-align:center; color:var(--sub); font-size:13px; margin:2px 0 8px;}
+  .gridWrap{padding:0 14px;}
+  /* 一面を掘るフィールド */
+  .digField{
+    position:relative; width:100%; aspect-ratio:1; border-radius:16px; overflow:hidden;
+    background:#150c05; box-shadow:inset 0 4px 14px #000a, 0 4px 10px #0006;
+    touch-action:none;
+  }
+  .digField canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+  .digReveal{
+    position:absolute; font-size:64px; pointer-events:none;
+    transform:translate(-50%,-50%) scale(.4); opacity:0;
+    transition:opacity .3s, transform .35s; filter:drop-shadow(0 3px 4px #000a);
+  }
+  .digReveal.show{ transform:translate(-50%,-50%) scale(1); opacity:1; animation:pop .4s; }
+  .digReveal .clod{
+    width:66px; height:66px; position:relative;
+    border-radius:54% 46% 50% 50% / 52% 50% 50% 48%;
+    background:radial-gradient(circle at 36% 30%, #8a6740, #5a3f24 70%, #422d18);
+    box-shadow:inset -6px -8px 10px #00000055, inset 4px 4px 8px #ffffff18, 0 4px 8px #0007;
+  }
+  .digReveal .clod::before,.digReveal .clod::after{content:''; position:absolute; border-radius:50%;}
+  .digReveal .clod::before{width:14px; height:12px; left:15px; top:13px; background:#00000033;}
+  .digReveal .clod::after{width:10px; height:9px; right:13px; bottom:15px; background:#ffffff14;}
+  .digRipple{
+    position:fixed; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%;
+    border:3px solid #ffd98a; pointer-events:none; z-index:40; animation:ripple .5s ease-out forwards;
+  }
+  @keyframes ripple{ from{transform:scale(.3); opacity:.85} to{transform:scale(3.2); opacity:0} }
+  .grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    background:#3a2715; padding:10px; border-radius:16px; box-shadow:inset 0 4px 12px #0006;
+  }
+  .cell{
+    aspect-ratio:1; border-radius:9px; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,var(--dirt2),var(--dirt3));
+    box-shadow:inset 0 -3px 0 #00000033, inset 0 2px 0 #ffffff14;
+    display:flex; align-items:center; justify-content:center; font-size:26px;
+    transition:transform .05s;
+  }
+  .cell.dug{background:linear-gradient(160deg,#241810,#1b1109); box-shadow:inset 0 3px 8px #000;}
+  .cell .crack{position:absolute; inset:0; opacity:0; transition:opacity .1s; pointer-events:none;}
+  .cell .item{opacity:0; transform:scale(.4); transition:transform .25s, opacity .25s;}
+  .cell.found .item{opacity:1; transform:scale(1);}
+  .cell.pop{animation:pop .3s;}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+  .staminaRow{display:flex; align-items:center; gap:10px; padding:12px 14px;}
+  .barOuter{flex:1; height:14px; background:#00000044; border-radius:999px; overflow:hidden;}
+  .barInner{height:100%; width:100%; background:linear-gradient(90deg,#ffd24d,#ff8a3d); transition:width .2s;}
+  .staminaRow .lab{font-size:12px; color:var(--sub); min-width:54px;}
+  /* ===== クリーニング画面 ===== */
+  #cleanScreen{display:none; flex-direction:column; align-items:center; justify-content:center; padding:14px;}
+  #cleanScreen.active{display:flex;}
+  .cleanCard{
+    width:100%; max-width:340px; background:var(--panel); border-radius:22px; padding:20px;
+    box-shadow:0 10px 30px var(--shadow); text-align:center;
+  }
+  .cleanTitle{font-weight:800; font-size:16px; margin-bottom:4px;}
+  .cleanSub{font-size:12.5px; color:var(--sub); margin-bottom:14px;}
+  .canvasWrap{position:relative; width:240px; height:240px; margin:0 auto 14px; border-radius:18px; overflow:hidden;
+    box-shadow:inset 0 0 0 3px #ffffff14, 0 6px 14px #0006;}
+  .canvasWrap .behind{position:absolute; font-size:100px; line-height:1; transform:translate(-50%,-50%); filter:drop-shadow(0 2px 3px #0006);}
+  canvas{position:absolute; inset:0; touch-action:none;}
+  .cleanBar{height:12px; background:#00000044; border-radius:999px; overflow:hidden; margin-bottom:14px;}
+  .cleanBar > div{height:100%; width:0%; background:linear-gradient(90deg,#5ad17b,#3fb0ff); transition:width .15s;}
+  .btn{
+    background:linear-gradient(180deg,var(--gold),#f0a93d); color:#3a2400; font-weight:800;
+    border:none; padding:14px 22px; border-radius:14px; font-size:16px; width:100%;
+    box-shadow:0 4px 0 #b9791f; transition:transform .06s, box-shadow .06s;
+  }
+  .btn:active{transform:translateY(3px); box-shadow:0 1px 0 #b9791f;}
+  .btn[disabled]{filter:grayscale(.6) brightness(.8); box-shadow:0 4px 0 #6b5530;}
+  .btn.ghost{background:var(--panel2); color:var(--text); box-shadow:0 4px 0 #00000044;}
+  /* ===== 図鑑 ===== */
+  .dexGrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .dexCard{
+    background:var(--panel); border-radius:14px; padding:10px 6px; text-align:center;
+    position:relative; border:1px solid #ffffff10; min-height:96px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  }
+  .dexCard .ic{font-size:34px;}
+  .dexCard .nm{font-size:11px; font-weight:700; line-height:1.2;}
+  .dexCard .ct{position:absolute; top:5px; right:7px; font-size:10px; color:var(--sub);}
+  .dexCard.locked .ic{filter:grayscale(1) brightness(.4); opacity:.5;}
+  .dexCard.locked .nm{color:#6f6353;}
+  .rb{position:absolute; top:5px; left:6px; width:9px; height:9px; border-radius:50%;}
+  .rb.common{background:var(--common);} .rb.rare{background:var(--rare);}
+  .rb.epic{background:var(--epic);} .rb.legend{background:var(--legend); box-shadow:0 0 6px var(--legend);}
+  .dexStats{display:flex; gap:8px; margin:4px 2px 12px; font-size:12px; color:var(--sub); flex-wrap:wrap;}
+  .pill{background:var(--panel); padding:5px 11px; border-radius:999px;}
+  .dexRare{font-size:12px; letter-spacing:1px; margin-top:1px;}
+  .dexRare .dim{color:#5f5341;}
+  /* スタミナ強化パネル */
+  .upPanel{display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:linear-gradient(135deg,#4a3825,#3a2b1b); border:1px solid #ffffff14;
+    border-radius:16px; padding:12px 14px; margin:8px 0 2px; box-shadow:0 4px 10px var(--shadow);}
+  .upTitle{font-weight:800; font-size:15px;}
+  .upSub{font-size:12px; color:var(--sub); margin-top:2px;}
+  .upBtn{background:linear-gradient(180deg,var(--gold),#f0a93d); color:#3a2400; font-weight:800;
+    border:none; border-radius:12px; padding:10px 16px; font-size:13px; box-shadow:0 3px 0 #b9791f; white-space:nowrap;}
+  .upBtn:active{transform:translateY(2px); box-shadow:0 1px 0 #b9791f;}
+  /* ===== 下部ナビ ===== */
+  nav{
+    position:absolute; bottom:0; left:0; right:0; display:flex; background:#211810f2;
+    border-top:1px solid #ffffff12; padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+    backdrop-filter:blur(8px);
+  }
+  nav button{
+    flex:1; background:none; border:none; color:var(--sub); font-size:11px; font-weight:700;
+    display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0;
+  }
+  nav button .ni{font-size:22px;}
+  nav button.active{color:var(--gold);}
+  /* ===== 報酬モーダル ===== */
+  #modal{position:fixed; inset:0; background:#000000bb; display:none; align-items:center; justify-content:center; z-index:50; padding:24px;}
+  #modal.show{display:flex;}
+  .reward{background:linear-gradient(180deg,var(--panel2),var(--panel)); border-radius:24px; padding:26px 22px; text-align:center;
+    max-width:320px; width:100%; box-shadow:0 16px 40px #000a; animation:rise .35s;}
+  @keyframes rise{from{transform:translateY(30px) scale(.95); opacity:0}to{transform:none; opacity:1}}
+  .reward .ric{font-size:84px; margin:4px 0 6px; animation:bob 1.6s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .reward .rname{font-size:22px; font-weight:800; margin-bottom:2px;}
+  .reward .rrare{font-size:13px; font-weight:800; letter-spacing:1px; margin-bottom:8px;}
+  .reward .rdesc{font-size:13px; color:var(--sub); margin-bottom:6px; line-height:1.5;}
+  .reward .rnew{display:inline-block; background:var(--ok); color:#0a2; font-weight:800; font-size:11px;
+    padding:3px 10px; border-radius:999px; margin-bottom:14px;}
+  .reward .rcoin{font-size:14px; font-weight:700; color:var(--gold); margin-bottom:16px;}
+  .sparkle{position:fixed; pointer-events:none; font-size:20px; z-index:60; animation:spk .8s ease-out forwards;}
+  @keyframes spk{from{transform:translateY(0) scale(1); opacity:1}to{transform:translateY(-60px) scale(.3); opacity:0}}
+  .toast{position:fixed; left:50%; top:14%; transform:translateX(-50%); background:#000000cc; color:#fff;
+    padding:10px 18px; border-radius:999px; font-size:13px; font-weight:700; z-index:70; opacity:0; transition:opacity .3s;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="title">⛏️ ほりほり発掘</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button id="muteBtn" class="coins" style="cursor:pointer;" onclick="toggleMute()">🔊</button>
+      <div class="coins">🪙 <span id="coinNum">0</span></div>
+    </div>
+  </header>
+
+  <!-- ホーム -->
+  <section id="homeScreen" class="screen active">
+    <div id="upgradePanel"></div>
+    <h2 class="sec">採掘場をえらぶ</h2>
+    <div id="siteList"></div>
+  </section>
+
+  <!-- 発掘 -->
+  <section id="digScreen" class="screen">
+    <div class="digTop">
+      <button class="backBtn" onclick="goHome()">‹ もどる</button>
+      <div id="digSiteName" style="font-weight:800;"></div>
+      <div style="width:64px;"></div>
+    </div>
+    <div class="digHint">土をタップして、かくれたお宝を掘りあてよう⛏️<br>近くに埋まってると ✨ が光るよ</div>
+    <div class="gridWrap">
+      <div class="digField" id="digField">
+        <canvas id="digCanvas" width="320" height="320"></canvas>
+        <div class="digReveal" id="digReveal"></div>
+      </div>
+    </div>
+    <div class="staminaRow">
+      <span class="lab">スタミナ</span>
+      <div class="barOuter"><div class="barInner" id="staminaBar"></div></div>
+    </div>
+  </section>
+
+  <!-- クリーニング -->
+  <section id="cleanScreen" class="screen">
+    <div class="cleanCard">
+      <div class="cleanTitle">✨ おそうじタイム</div>
+      <div class="cleanSub">絵柄が全部見えるまでゴシゴシこすろう！</div>
+      <div class="canvasWrap">
+        <div class="behind" id="cleanBehind">❓</div>
+        <canvas id="mud" width="240" height="240"></canvas>
+      </div>
+      <div class="cleanBar"><div id="cleanFill"></div></div>
+      <button class="btn" id="collectBtn" disabled onclick="collectItem()">もうすこしこすってね…</button>
+    </div>
+  </section>
+
+  <!-- 図鑑 -->
+  <section id="dexScreen" class="screen">
+    <h2 class="sec">📖 コレクション図鑑</h2>
+    <div class="dexStats">
+      <span class="pill">発見 <b id="dexFound">0</b> / <span id="dexTotal">0</span></span>
+      <span class="pill">総ゲット <b id="dexTotalGet">0</b> 個</span>
+    </div>
+    <div class="dexGrid" id="dexGrid"></div>
+  </section>
+
+  <nav>
+    <button id="navHome" class="active" onclick="switchTab('home')"><span class="ni">🏠</span>ホーム</button>
+    <button id="navDex" onclick="switchTab('dex')"><span class="ni">📖</span>図鑑</button>
+  </nav>
+</div>
+
+<div id="modal"><div class="reward" id="rewardBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ほりほり発掘コレクション  -  全データ & ロジック
+   ============================================================ */
+
+// レアリティ定義（色・重み・コイン）
+const RARITY = {
+  common: {label:"コモン",   color:"var(--common)", coin:5,   w:60, star:1},
+  rare:   {label:"レア",     color:"var(--rare)",   coin:20,  w:26, star:2},
+  epic:   {label:"エピック", color:"var(--epic)",   coin:80,  w:11, star:3},
+  legend: {label:"レジェンド",color:"var(--legend)", coin:300, w:3,  star:4},
+};
+
+// 採掘場（site）。each: アイテムプール
+const SITES = [
+  { id:"beach", name:"きらきら砂浜", emoji:"🏖️", grad:"linear-gradient(135deg,#f6c97a,#e88f5a)",
+    desc:"貝がらやガラス、たまにお宝も？", unlock:0,
+    items:[
+      {ic:"🐚", nm:"きれいな貝がら", r:"common", desc:"波がはこんできた小さな宝物。"},
+      {ic:"🫙", nm:"シーグラス", r:"common", desc:"角がとれてまるくなったガラス片。"},
+      {ic:"🦀", nm:"カニのはさみ", r:"common", desc:"持ち主はどこへ…？"},
+      {ic:"🥤", nm:"流れ着いた空きカン", r:"common", desc:"ゴミはちゃんと拾おう。"},
+      {ic:"🪙", nm:"古い金貨", r:"rare", desc:"海賊のおとしもの…かも。"},
+      {ic:"💍", nm:"なくした指輪", r:"epic", desc:"誰かの思い出がつまっている。"},
+      {ic:"⭐", nm:"ヒトデ", r:"common", desc:"五本うでのアイドル。"},
+      {ic:"🦞", nm:"おおきなロブスター", r:"common", desc:"はさみが立派。"},
+      {ic:"🍾", nm:"手紙入りのびん", r:"rare", desc:"だれかのメッセージが入っている。"},
+      {ic:"🏴‍☠️", nm:"海賊の地図", r:"epic", desc:"宝のありかが記されている…？"},
+      {ic:"🧜", nm:"人魚のうろこ", r:"legend", desc:"伝説の生き物の証。とても希少。"},
+    ]},
+  { id:"park", name:"なかよし公園", emoji:"🌳", grad:"linear-gradient(135deg,#7ec96a,#3f9b56)",
+    desc:"虫やおもちゃ、忘れもの色々", unlock:0,
+    items:[
+      {ic:"🪱", nm:"ミミズ", r:"common", desc:"土をたがやす働きもの。"},
+      {ic:"🍂", nm:"おちば", r:"common", desc:"季節のかけら。"},
+      {ic:"🔩", nm:"さびたネジ", r:"common", desc:"なにかの部品だったらしい。"},
+      {ic:"🪀", nm:"わすれたヨーヨー", r:"rare", desc:"まだ回せそう。"},
+      {ic:"🐛", nm:"カブトムシの幼虫", r:"rare", desc:"夏には立派になるかな。"},
+      {ic:"🧸", nm:"うもれたクマさん", r:"epic", desc:"だれかの大切な相棒。"},
+      {ic:"🐌", nm:"カタツムリ", r:"common", desc:"のんびりやさん。"},
+      {ic:"⚽", nm:"パンクしたボール", r:"common", desc:"よく遊んだあとがある。"},
+      {ic:"👛", nm:"おとしたおさいふ", r:"rare", desc:"中身は…からっぽ。"},
+      {ic:"🃏", nm:"キラカード", r:"epic", desc:"プレミアがつくレアもの。"},
+      {ic:"🗝️", nm:"なぞの古いカギ", r:"legend", desc:"どの扉をひらくのだろう？"},
+    ]},
+  { id:"ruins", name:"わすれられた遺跡", emoji:"🏛️", grad:"linear-gradient(135deg,#b89b6e,#7a6038)",
+    desc:"古代のお宝が眠る場所", unlock:50,
+    items:[
+      {ic:"🪨", nm:"ただの石ころ", r:"common", desc:"…と思いきや、ただの石。"},
+      {ic:"🏺", nm:"こわれたツボ", r:"common", desc:"破片からロマンを感じる。"},
+      {ic:"📜", nm:"古文書のきれはし", r:"rare", desc:"読めない文字が書いてある。"},
+      {ic:"⚱️", nm:"黄金のツボ", r:"epic", desc:"中身は空っぽ。でも美しい。"},
+      {ic:"👑", nm:"王さまの冠", r:"epic", desc:"いつの時代の王だろう。"},
+      {ic:"🪙", nm:"古代のコイン", r:"common", desc:"すり減った刻印が見える。"},
+      {ic:"🗡️", nm:"さびた剣", r:"rare", desc:"むかしの戦いの名残。"},
+      {ic:"📿", nm:"魔よけの数珠", r:"rare", desc:"持つと心が落ち着く。"},
+      {ic:"⏳", nm:"時のすなどけい", r:"epic", desc:"砂は今も静かに落ちる。"},
+      {ic:"💎", nm:"特大ダイヤ", r:"legend", desc:"目もくらむ輝き。"},
+      {ic:"🗿", nm:"古代のモアイ像", r:"legend", desc:"なぜここに…？謎は深まる。"},
+    ]},
+  { id:"volcano", name:"ごつごつ火山", emoji:"🌋", grad:"linear-gradient(135deg,#e0633f,#8a2b1c)",
+    desc:"鉱石や化石が見つかる", unlock:150,
+    items:[
+      {ic:"🪨", nm:"火山岩", r:"common", desc:"ざらざらして軽い。"},
+      {ic:"🦴", nm:"なぞの骨", r:"common", desc:"なんの生き物だろう。"},
+      {ic:"🐚", nm:"アンモナイト化石", r:"rare", desc:"はるか昔の海の生き物。"},
+      {ic:"🟡", nm:"こはく（虫いり）", r:"rare", desc:"中に小さな虫がとじこめられている。"},
+      {ic:"💠", nm:"あおい宝石", r:"epic", desc:"火の中で生まれた結晶。"},
+      {ic:"🦖", nm:"恐竜のキバ", r:"epic", desc:"大むかしの王者のあかし。"},
+      {ic:"⛏️", nm:"こわれたツルハシ", r:"common", desc:"先人の道具だろうか。"},
+      {ic:"💛", nm:"きいろい鉱石", r:"rare", desc:"金…かもしれない。"},
+      {ic:"🟣", nm:"むらさき水晶", r:"epic", desc:"あやしく光る結晶。"},
+      {ic:"🐉", nm:"竜のたまご", r:"legend", desc:"かすかに鼓動を感じる…？"},
+      {ic:"🔥", nm:"伝説のほのおの石", r:"legend", desc:"今もほんのり温かい。"},
+    ]},
+  { id:"sea", name:"ふかうみの底", emoji:"🌊", grad:"linear-gradient(135deg,#3aa0c9,#143a6b)",
+    desc:"沈没船とふしぎな深海生物", unlock:400,
+    items:[
+      {ic:"🐟", nm:"ふしぎな魚", r:"common", desc:"見たことのない模様。"},
+      {ic:"🪸", nm:"サンゴのかけら", r:"common", desc:"海の宝石ともよばれる。"},
+      {ic:"🫧", nm:"あぶく石", r:"common", desc:"軽くてぷかぷか浮く。"},
+      {ic:"🦑", nm:"しんかいイカ", r:"common", desc:"くらやみで光るらしい。"},
+      {ic:"🧭", nm:"こわれた羅針盤", r:"rare", desc:"針はぐるぐる回ったまま。"},
+      {ic:"⚓", nm:"いかりのかけら", r:"rare", desc:"大きな船のものだろう。"},
+      {ic:"🦈", nm:"サメの歯", r:"rare", desc:"ギザギザで鋭い。"},
+      {ic:"💰", nm:"沈没船の金庫", r:"epic", desc:"開ければ大金持ち…？"},
+      {ic:"🔱", nm:"海神のほこ", r:"legend", desc:"海をおさめる者の証。"},
+    ]},
+];
+
+// ===== セーブデータ =====
+const SAVE_KEY = "horihori_save_v1";
+let state = load();
+
+function load(){
+  try{
+    const s = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if(s && s.collected) return s;
+  }catch(e){}
+  return { coins:0, collected:{}, totalGet:0 };
+}
+function save(){ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }
+
+function itemKey(siteId,nm){ return siteId+"::"+nm; }
+
+// ===== 画面遷移 =====
+function switchTab(t){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('navHome').classList.toggle('active', t==='home');
+  document.getElementById('navDex').classList.toggle('active', t==='dex');
+  document.querySelector('nav').style.display='flex';
+  if(t==='home'){ document.getElementById('homeScreen').classList.add('active'); renderHome(); }
+  else { document.getElementById('dexScreen').classList.add('active'); renderDex(); }
+}
+function goHome(){ switchTab('home'); }
+
+// ===== ホーム描画 =====
+function renderHome(){
+  const list = document.getElementById('siteList');
+  list.innerHTML='';
+  SITES.forEach(site=>{
+    const locked = state.coins < site.unlock && !isUnlocked(site);
+    const el = document.createElement('div');
+    el.className='site';
+    el.style.background = site.grad;
+    el.innerHTML = `
+      <div class="emoji">${site.emoji}</div>
+      <h3>${site.name}</h3>
+      <p>${site.desc}</p>
+      <div class="go">掘る ⛏️</div>
+      ${locked?`<div class="lock">🔒 コイン ${site.unlock} で解放<small>あと ${site.unlock-state.coins} 🪙</small></div>`:''}
+    `;
+    if(!locked){ el.onclick=()=>startDig(site); }
+    list.appendChild(el);
+  });
+  // スタミナ強化パネル
+  const lv=state.staminaLevel||1, cost=lv*50;
+  document.getElementById('upgradePanel').innerHTML=`
+    <div class="upPanel">
+      <div>
+        <div class="upTitle">⚡ スタミナ Lv.${lv}</div>
+        <div class="upSub">最大スタミナ ${getMaxStamina()}（掘れる回数アップ）</div>
+      </div>
+      <button class="upBtn" onclick="upgradeStamina()">強化 ${cost}🪙</button>
+    </div>`;
+  document.getElementById('coinNum').textContent = state.coins;
+}
+function upgradeStamina(){
+  const lv=state.staminaLevel||1, cost=lv*50;
+  if(state.coins<cost){ toast('コインが足りないよ（'+cost+'🪙ひつよう）'); return; }
+  state.coins-=cost; state.staminaLevel=lv+1; save();
+  fanfare(); toast('スタミナ Lv.'+(lv+1)+'にアップ！⚡');
+  renderHome();
+}
+// 一度でも何か掘った場所は解放扱い（再ロック防止）
+function isUnlocked(site){
+  if(site.unlock===0) return true;
+  return state.collected && Object.keys(state.collected).some(k=>k.startsWith(site.id+"::"));
+}
+
+// ===== 発掘ロジック =====
+let currentSite=null, buriedItem=null, stamina=100;
+let digCanvas=null, digCtx=null, digItemX=0, digItemY=0, digRevealed=false, digging=false, lastDX=-99, lastDY=-99;
+let digItemHits=0, currentSoil=null, currentDiff=null;
+
+// 採掘場ごとの土の色・テクスチャ
+const SOIL = {
+  beach:  { g:['#ecd6a0','#dcc084','#c7a45f'], grain:[120,90,40], spec:[255,250,232], stone:[205,180,125], hole:'#9c7c45' },
+  park:   { g:['#8a6038','#6f4a28','#553820'], grain:[20,12,5],   spec:[150,195,110], stone:[110,86,58],  hole:'#241608' },
+  ruins:  { g:['#b6a37c','#998663','#7c6b4e'], grain:[60,50,35],  spec:[235,228,205], stone:[150,140,120], hole:'#4f4530' },
+  volcano:{ g:['#6e3b2e','#532519','#39160e'], grain:[12,6,4],    spec:[255,150,60],  stone:[60,45,40],   hole:'#190a06' },
+  sea:    { g:['#4d7e90','#356073','#21465a'], grain:[10,25,35],  spec:[200,240,250], stone:[70,110,125], hole:'#142a36' },
+};
+// 採掘場ごとの難易度（find=見つかる範囲, depth=掘る深さ）
+const DIFF = {
+  beach:  { find:34, depth:2 },
+  park:   { find:32, depth:2 },
+  ruins:  { find:27, depth:3 },
+  volcano:{ find:23, depth:4 },
+  sea:    { find:19, depth:6 },
+};
+// 最大スタミナ（強化Lvで増える）
+function getMaxStamina(){ return 100 + ((state.staminaLevel||1)-1)*25; }
+
+function pickItem(site){
+  const total = site.items.reduce((a,it)=>a+RARITY[it.r].w,0);
+  let roll = Math.random()*total;
+  for(const it of site.items){ roll-=RARITY[it.r].w; if(roll<=0) return it; }
+  return site.items[0];
+}
+
+function startDig(site){
+  currentSite=site; buriedItem=pickItem(site);
+  stamina=getMaxStamina();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('digScreen').classList.add('active');
+  document.querySelector('nav').style.display='none';
+  document.getElementById('digSiteName').textContent=site.name;
+  buildDigField();
+  updateStamina();
+}
+
+// 土フィールドを用意し、お宝の埋蔵位置をランダムに決める
+function buildDigField(){
+  digCanvas=document.getElementById('digCanvas');
+  digCtx=digCanvas.getContext('2d');
+  const W=digCanvas.width, H=digCanvas.height;
+  currentSoil=SOIL[currentSite.id]||SOIL.park;
+  currentDiff=DIFF[currentSite.id]||{find:40,depth:1};
+  drawDirt(digCtx,W,H,currentSoil);
+  digItemX = 45 + Math.random()*(W-90);
+  digItemY = 45 + Math.random()*(H-90);
+  digRevealed=false; digItemHits=0; lastDX=-99; lastDY=-99;
+  const rev=document.getElementById('digReveal');
+  rev.innerHTML='<div class="clod"></div>'; // 何が出たかは掃除までナイショ
+  rev.classList.remove('show');
+  rev.style.left=(digItemX/W*100)+'%';
+  rev.style.top=(digItemY/H*100)+'%';
+}
+// 土のテクスチャを描く（採掘場ごとに色が変わる）
+function drawDirt(ctx,W,H,s){
+  ctx.globalCompositeOperation='source-over';
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,s.g[0]); g.addColorStop(0.5,s.g[1]); g.addColorStop(1,s.g[2]);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  const [gr,gg,gb]=s.grain;
+  for(let i=0;i<1100;i++){ // 土の粒・影
+    ctx.fillStyle=`rgba(${gr},${gg},${gb},${Math.random()*0.18})`;
+    ctx.beginPath(); ctx.arc(Math.random()*W,Math.random()*H,1+Math.random()*3.5,0,7); ctx.fill();
+  }
+  const [sr,sg,sb]=s.spec;
+  for(let i=0;i<600;i++){ // 明るいつぶ（砂・きらめき）
+    ctx.fillStyle=`rgba(${sr},${sg},${sb},${Math.random()*0.10})`;
+    ctx.beginPath(); ctx.arc(Math.random()*W,Math.random()*H,1+Math.random()*1.8,0,7); ctx.fill();
+  }
+  const [tr,tg,tb]=s.stone;
+  for(let i=0;i<30;i++){ // 小石
+    ctx.fillStyle=`rgba(${tr+(Math.random()*30-15)|0},${tg+(Math.random()*30-15)|0},${tb+(Math.random()*30-15)|0},.55)`;
+    ctx.beginPath(); ctx.arc(Math.random()*W,Math.random()*H,4+Math.random()*7,0,7); ctx.fill();
+  }
+}
+// 丸い穴を掘った跡を描く（重ねて掘るほど＝深いほど暗くなる）
+function paintHole(x,y,radius){
+  const ctx=digCtx;
+  ctx.globalCompositeOperation='source-over';
+  const hc=(currentSoil&&currentSoil.hole)||'#2a1a0d';
+  // 掘った土の色（半透明なので重ね掘りで少しずつ濃くなる）
+  const g=ctx.createRadialGradient(x,y,2,x,y,radius);
+  g.addColorStop(0,hexA(hc,0.5)); g.addColorStop(0.6,hexA(hc,0.42)); g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;
+  ctx.beginPath(); ctx.arc(x,y,radius,0,7); ctx.fill();
+  // 深さの影（重ねるほど黒く沈む）
+  const g2=ctx.createRadialGradient(x,y,2,x,y,radius*0.72);
+  g2.addColorStop(0,'rgba(0,0,0,0.20)'); g2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g2;
+  ctx.beginPath(); ctx.arc(x,y,radius*0.72,0,7); ctx.fill();
+}
+// #rrggbb を rgba() に変換
+function hexA(hex,a){
+  const n=parseInt(hex.slice(1),16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+// 指定座標を掘る
+function digAt(clientX, clientY){
+  if(digRevealed) return;
+  if(stamina<=0){ toast('スタミナ切れ…強化するか少し待ってね'); return; }
+  const r=digCanvas.getBoundingClientRect();
+  const x=(clientX-r.left)*(digCanvas.width/r.width);
+  const y=(clientY-r.top)*(digCanvas.height/r.height);
+  paintHole(x,y,34);
+  vibrate(8); digSound();
+  rippleAt(clientX,clientY);
+  spawnAt(clientX,clientY,'💨');
+  stamina=Math.max(0, stamina-4); updateStamina();
+  const dist=Math.hypot(x-digItemX, y-digItemY);
+  const find=currentDiff.find, depth=currentDiff.depth;
+  if(dist<find){
+    // お宝の真上！ 深いほど何度も掘る必要がある
+    digItemHits++;
+    paintHole(digItemX, digItemY, 28+digItemHits*9);
+    if(digItemHits>=depth){
+      digRevealed=true;
+      paintHole(digItemX,digItemY,52);
+      document.getElementById('digReveal').classList.add('show');
+      vibrate([20,40,30]); chime();
+      spawnAt(clientX,clientY,'✨');
+      setTimeout(()=>goClean(), 650);
+    } else {
+      // まだ深い…手ごたえあり
+      vibrate(18); hintSound();
+      spawnAt(clientX,clientY,'✨');
+      if(digItemHits===1 && depth>1) toast('なにか手ごたえ…もっと掘って！');
+    }
+  } else if(dist<find+56 && Math.random()<0.5){
+    // 近い！ヒント
+    spawnAt(clientX,clientY,'✨'); hintSound();
+  }
+}
+// 波紋エフェクト
+function rippleAt(clientX,clientY){
+  const d=document.createElement('div');
+  d.className='digRipple';
+  d.style.left=clientX+'px'; d.style.top=clientY+'px';
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(),520);
+}
+// 掘る操作のバインド（タップ＆ドラッグ）
+function bindDig(){
+  const cv=document.getElementById('digCanvas');
+  const pos=e=>{ const p=e.touches?e.touches[0]:e; return {x:p.clientX,y:p.clientY}; };
+  cv.addEventListener('pointerdown', e=>{ digging=true; const p=pos(e); lastDX=p.x; lastDY=p.y; digAt(p.x,p.y); e.preventDefault(); });
+  cv.addEventListener('pointermove', e=>{ if(!digging)return; const p=pos(e);
+    if(Math.hypot(p.x-lastDX,p.y-lastDY)<16) return; lastDX=p.x; lastDY=p.y; digAt(p.x,p.y); e.preventDefault(); });
+  window.addEventListener('pointerup', ()=>{ digging=false; });
+}
+
+function updateStamina(){
+  document.getElementById('staminaBar').style.width=(stamina/getMaxStamina()*100)+'%';
+}
+// スタミナ自動回復
+setInterval(()=>{ const mx=getMaxStamina(); if(stamina<mx){ stamina=Math.min(mx,stamina+2); updateStamina(); } },500);
+
+// ===== クリーニング（canvas） =====
+let cleanPct=0, cleanItemCX=120, cleanItemCY=120;
+function goClean(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('cleanScreen').classList.add('active');
+  const cb=document.getElementById('cleanBehind');
+  cb.textContent=buriedItem.ic;
+  const lx=26+Math.random()*48, ly=28+Math.random()*44; // ランダムな位置に隠す
+  cb.style.left=lx+'%'; cb.style.top=ly+'%';
+  cleanItemCX=lx/100*240; cleanItemCY=ly/100*240;
+  const btn=document.getElementById('collectBtn');
+  btn.disabled=true; btn.textContent='もうすこしこすってね…';
+  cleanPct=0; document.getElementById('cleanFill').style.width='0%';
+  initMud();
+}
+
+let ctx,mudCanvas,erased,totalPix;
+function initMud(){
+  mudCanvas=document.getElementById('mud');
+  ctx=mudCanvas.getContext('2d');
+  const W=mudCanvas.width, H=mudCanvas.height;
+  // 泥のテクスチャ
+  ctx.globalCompositeOperation='source-over';
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#6b4a2b'); g.addColorStop(1,'#4a3219');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  for(let i=0;i<450;i++){
+    ctx.fillStyle=`rgba(0,0,0,${Math.random()*0.18})`;
+    const r=2+Math.random()*6;
+    ctx.beginPath();
+    ctx.arc(Math.random()*W,Math.random()*H,r,0,7); ctx.fill();
+  }
+  for(let i=0;i<200;i++){
+    ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.06})`;
+    ctx.fillRect(Math.random()*W,Math.random()*H,2,2);
+  }
+  erased=0; totalPix=W*H;
+}
+
+function scratch(x,y){
+  ctx.globalCompositeOperation='destination-out';
+  ctx.fillStyle='rgba(0,0,0,1)';   // destination-out はアルファ量で消すので不透明に
+  ctx.beginPath();
+  ctx.arc(x,y,22,0,7); ctx.fill();
+  vibrate(5);
+  if(Math.random()<0.2) broomSound();
+  // 進捗をサンプリングで計算（軽量）
+  if(Math.random()<0.25) measureClean();
+}
+function measureClean(){
+  // アイテムの絵柄まわりの泥が落ちたかを判定する
+  const W=mudCanvas.width,H=mudCanvas.height, half=52;
+  const x0=Math.max(0,Math.round(cleanItemCX-half)), y0=Math.max(0,Math.round(cleanItemCY-half));
+  const x1=Math.min(W,Math.round(cleanItemCX+half)), y1=Math.min(H,Math.round(cleanItemCY+half));
+  const data=ctx.getImageData(x0,y0,x1-x0,y1-y0).data;
+  let clear=0,total=0;
+  for(let i=3;i<data.length;i+=4){ total++; if(data[i]<20) clear++; }
+  cleanPct=total?Math.min(100, Math.round(clear/total*100)):0;
+  document.getElementById('cleanFill').style.width=cleanPct+'%';
+  const btn=document.getElementById('collectBtn');
+  if(cleanPct>=92){
+    btn.disabled=false; btn.textContent='🎉 コレクションする！';
+  }
+}
+
+function canvasPos(e){
+  const r=mudCanvas.getBoundingClientRect();
+  const p=e.touches?e.touches[0]:e;
+  return { x:(p.clientX-r.left)*(mudCanvas.width/r.width),
+           y:(p.clientY-r.top)*(mudCanvas.height/r.height) };
+}
+let cleaning=false;
+function bindClean(){
+  const cv=document.getElementById('mud');
+  const down=e=>{cleaning=true; const p=canvasPos(e); scratch(p.x,p.y); e.preventDefault();};
+  const move=e=>{ if(!cleaning)return; const p=canvasPos(e); scratch(p.x,p.y); e.preventDefault();};
+  const up=()=>{ cleaning=false; measureClean(); };
+  cv.addEventListener('pointerdown',down);
+  cv.addEventListener('pointermove',move);
+  window.addEventListener('pointerup',up);
+}
+
+// ===== コレクト & 報酬 =====
+function collectItem(){
+  const key=itemKey(currentSite.id, buriedItem.nm);
+  const isNew=!state.collected[key];
+  state.collected[key]=(state.collected[key]||0)+1;
+  state.totalGet++;
+  const coin=RARITY[buriedItem.r].coin + (isNew?20:0);
+  state.coins+=coin;
+  save();
+  showReward(buriedItem, isNew, coin);
+}
+
+function showReward(it, isNew, coin){
+  const r=RARITY[it.r];
+  const box=document.getElementById('rewardBox');
+  box.innerHTML=`
+    <div class="ric">${it.ic}</div>
+    <div class="rrare"><span style="color:${r.color}">${'★'.repeat(r.star)}</span><span style="color:#6b5d46">${'☆'.repeat(4-r.star)}</span> <span style="color:${r.color}">${r.label}</span></div>
+    <div class="rname">${it.nm}</div>
+    <div class="rdesc">${it.desc}</div>
+    ${isNew?'<div class="rnew">✨ NEW! はじめての発見</div>':''}
+    <div class="rcoin">+${coin} 🪙 ${isNew?'(発見ボーナス +20)':''}</div>
+    <button class="btn" onclick="closeReward()">やったー！</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+  if(it.r==='legend'||it.r==='epic'){ burst(); }
+  fanfare();
+  vibrate(isNew?[30,30,30,30,60]:[20,40]);
+}
+function closeReward(){
+  document.getElementById('modal').classList.remove('show');
+  goHome();
+}
+
+// ===== 図鑑 =====
+function renderDex(){
+  const grid=document.getElementById('dexGrid');
+  grid.innerHTML='';
+  let total=0, found=0;
+  SITES.forEach(site=>{
+    site.items.forEach(it=>{
+      total++;
+      const key=itemKey(site.id,it.nm);
+      const ct=state.collected[key]||0;
+      if(ct>0) found++;
+      const card=document.createElement('div');
+      card.className='dexCard'+(ct>0?'':' locked');
+      card.innerHTML=`
+        <span class="rb ${it.r}"></span>
+        ${ct>0?`<span class="ct">×${ct}</span>`:''}
+        <div class="ic">${ct>0?it.ic:'❔'}</div>
+        <div class="nm">${ct>0?it.nm:'？？？'}</div>
+        <div class="dexRare">${ct>0
+          ? `<span style="color:${RARITY[it.r].color}">${'★'.repeat(RARITY[it.r].star)}</span><span class="dim">${'☆'.repeat(4-RARITY[it.r].star)}</span>`
+          : `<span class="dim">☆☆☆☆</span>`}</div>
+      `;
+      grid.appendChild(card);
+    });
+  });
+  document.getElementById('dexFound').textContent=found;
+  document.getElementById('dexTotal').textContent=total;
+  document.getElementById('dexTotalGet').textContent=state.totalGet;
+}
+
+// ===== サウンド（Web Audio。音声ファイル不要） =====
+let actx=null;
+function audio(){
+  if(state.muted) return null;
+  if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+  if(actx.state==='suspended') actx.resume();
+  return actx;
+}
+// ザクッという土を掘る音（フィルタしたノイズ）
+function noiseBurst(dur,freq,vol){
+  const ac=audio(); if(!ac) return; const t=ac.currentTime;
+  const buf=ac.createBuffer(1, Math.floor(ac.sampleRate*dur), ac.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2); }
+  const src=ac.createBufferSource(); src.buffer=buf;
+  const filt=ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=freq;
+  const g=ac.createGain(); g.gain.value=vol;
+  src.connect(filt); filt.connect(g); g.connect(ac.destination); src.start(t);
+}
+function digSound(){ noiseBurst(0.13, 650+Math.random()*500, 0.4); }
+// 箒でサッサッと掃くような音（バンドパスしたノイズを山なりの音量で）
+function broomSound(){
+  const ac=audio(); if(!ac) return; const t=ac.currentTime;
+  const dur=0.22;
+  const buf=ac.createBuffer(1, Math.floor(ac.sampleRate*dur), ac.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++){ const env=Math.sin(Math.PI*i/d.length); d[i]=(Math.random()*2-1)*env; }
+  const src=ac.createBufferSource(); src.buffer=buf;
+  const bp=ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1900+Math.random()*500; bp.Q.value=0.7;
+  const g=ac.createGain(); g.gain.value=0.16;
+  src.connect(bp); bp.connect(g); g.connect(ac.destination); src.start(t);
+}
+// やわらかい単音
+function tone(freq,start,dur,vol,type){
+  const ac=audio(); if(!ac) return; const t=ac.currentTime+start;
+  const o=ac.createOscillator(); const g=ac.createGain();
+  o.type=type||'triangle'; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+dur+0.02);
+}
+function hintSound(){ tone(880,0,0.15,0.16,'sine'); }
+function chime(){ tone(660,0,0.18,0.25); tone(990,0.1,0.32,0.25); }
+function fanfare(){ [523,659,784,1047].forEach((f,i)=>tone(f,i*0.1,0.35,0.26)); }
+function toggleMute(){
+  state.muted=!state.muted; save();
+  document.getElementById('muteBtn').textContent = state.muted?'🔇':'🔊';
+  if(!state.muted) audio();
+}
+
+// ===== エフェクト & ユーティリティ =====
+function vibrate(p){ if(navigator.vibrate){ try{navigator.vibrate(p);}catch(e){} } }
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1400);
+}
+function spawnAt(clientX, clientY, ch){
+  const s=document.createElement('div');
+  s.className='sparkle'; s.textContent=ch;
+  s.style.left=(clientX-10)+'px';
+  s.style.top=(clientY-10)+'px';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),800);
+}
+function spawnSparkle(el, ch){
+  const r=el.getBoundingClientRect();
+  spawnAt(r.left+r.width/2, r.top+r.height/2, ch);
+}
+function burst(){
+  const chars=['✨','🎉','⭐','💫','🌟'];
+  for(let i=0;i<14;i++){
+    const s=document.createElement('div');
+    s.className='sparkle'; s.textContent=chars[i%chars.length];
+    s.style.left=(window.innerWidth/2-10)+'px';
+    s.style.top=(window.innerHeight/2-40)+'px';
+    s.style.setProperty('animation','spk .9s ease-out forwards');
+    s.style.transform=`translate(${(Math.random()-0.5)*260}px,0)`;
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  }
+}
+
+// ===== 起動 =====
+bindClean();
+bindDig();
+renderHome();
+document.getElementById('coinNum').textContent=state.coins;
+document.getElementById('muteBtn').textContent = state.muted?'🔇':'🔊';
+</script>
+</body>
+</html>
