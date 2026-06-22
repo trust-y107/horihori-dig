@@ -202,7 +202,8 @@
   <header>
     <div class="title">⛏️ ほりほり発掘</div>
     <div style="display:flex; align-items:center; gap:8px;">
-      <button id="muteBtn" class="coins" style="cursor:pointer;" onclick="toggleMute()">🔊</button>
+      <button id="bgmBtn" class="coins" style="cursor:pointer;" onclick="toggleBGM()" title="BGM">🎵</button>
+      <button id="muteBtn" class="coins" style="cursor:pointer;" onclick="toggleMute()" title="効果音">🔊</button>
       <div class="coins">🪙 <span id="coinNum">0</span></div>
     </div>
   </header>
@@ -737,12 +738,12 @@ function renderDex(){
 
 // ===== サウンド（Web Audio。音声ファイル不要） =====
 let actx=null;
-function audio(){
-  if(state.muted) return null;
+function ensureCtx(){
   if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
   if(actx.state==='suspended') actx.resume();
   return actx;
 }
+function audio(){ if(state.muted) return null; return ensureCtx(); }
 // ザクッという土を掘る音（フィルタしたノイズ）
 function noiseBurst(dur,freq,vol){
   const ac=audio(); if(!ac) return; const t=ac.currentTime;
@@ -786,6 +787,55 @@ function toggleMute(){
   if(!state.muted) audio();
 }
 
+// ===== BGM（Web Audioで生成するゆったりループ） =====
+let bgmGain=null, bgmSched=null, bgmStep=0, bgmNextTime=0;
+const BGM_BPM=80, BGM_STEPS=32, BGM_BASE=130.81; // C3
+// 落ち着くコード進行：Cmaj7 → Am7 → Fmaj7 → G6（半音オフセット）
+const BGM_CHORDS=[ [0,4,7,11], [-3,0,4,7], [-7,-3,0,4], [-5,-1,2,4] ];
+function bgmFreq(semi){ return BGM_BASE*Math.pow(2, semi/12); }
+function bgmTone(freq,t,dur,vol,type){
+  if(!actx||!bgmGain) return;
+  const o=actx.createOscillator(), g=actx.createGain();
+  o.type=type||'triangle'; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+0.04);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(bgmGain); o.start(t); o.stop(t+dur+0.05);
+}
+function bgmPlayStep(step,t){
+  const chord=BGM_CHORDS[Math.floor(step/8)%4];
+  const inBar=step%8;
+  if(inBar===0){ // 小節頭：やわらかいパッド＋ベース
+    chord.forEach(s=>bgmTone(bgmFreq(s),t,2.2,0.03,'sine'));
+    bgmTone(bgmFreq(chord[0]-12),t,1.9,0.05,'triangle');
+  }
+  if(inBar===4){ bgmTone(bgmFreq(chord[0]-12+7),t,1.0,0.04,'triangle'); }
+  // アルペジオ旋律（1オクターブ上）
+  bgmTone(bgmFreq(chord[inBar%chord.length]+12),t,0.5,0.04,'triangle');
+}
+function bgmScheduler(){
+  if(!actx) return;
+  const eighth=(60/BGM_BPM)/2;
+  while(bgmNextTime < actx.currentTime+0.15){
+    bgmPlayStep(bgmStep,bgmNextTime);
+    bgmNextTime+=eighth;
+    bgmStep=(bgmStep+1)%BGM_STEPS;
+  }
+}
+function startBGM(){
+  if(state.bgmOff || bgmSched) return;
+  const ac=ensureCtx(); if(!ac) return;
+  if(!bgmGain){ bgmGain=ac.createGain(); bgmGain.gain.value=1; bgmGain.connect(ac.destination); }
+  bgmStep=0; bgmNextTime=ac.currentTime+0.1;
+  bgmSched=setInterval(bgmScheduler,40);
+}
+function stopBGM(){ if(bgmSched){ clearInterval(bgmSched); bgmSched=null; } }
+function toggleBGM(){
+  state.bgmOff=!state.bgmOff; save();
+  document.getElementById('bgmBtn').style.opacity = state.bgmOff?'0.4':'1';
+  if(state.bgmOff) stopBGM(); else startBGM();
+}
+
 // ===== エフェクト & ユーティリティ =====
 function vibrate(p){ if(navigator.vibrate){ try{navigator.vibrate(p);}catch(e){} } }
 function toast(msg){
@@ -825,6 +875,10 @@ bindDig();
 renderHome();
 document.getElementById('coinNum').textContent=state.coins;
 document.getElementById('muteBtn').textContent = state.muted?'🔇':'🔊';
+document.getElementById('bgmBtn').style.opacity = state.bgmOff?'0.4':'1';
+// 最初のタップでBGM開始（ブラウザの自動再生制限を回避）
+function firstGesture(){ ensureCtx(); startBGM(); window.removeEventListener('pointerdown', firstGesture); }
+window.addEventListener('pointerdown', firstGesture);
 </script>
 </body>
 </html>
