@@ -550,14 +550,14 @@ const SOIL = {
 };
 // 採掘場ごとの難易度（find=見つかる範囲, depth=掘る深さ）
 const DIFF = {
-  beach:  { find:34, depth:2 },
-  park:   { find:32, depth:2 },
-  ruins:  { find:27, depth:3 },
-  volcano:{ find:23, depth:4 },
-  sea:    { find:19, depth:6 },
-  desert: { find:20, depth:5 },
-  ice:    { find:18, depth:6 },
-  moon:   { find:16, depth:7 },
+  beach:  { find:34, depth:2, mul:1 },
+  park:   { find:32, depth:2, mul:1.2 },
+  ruins:  { find:27, depth:3, mul:1.6 },
+  volcano:{ find:23, depth:4, mul:2.2 },
+  sea:    { find:19, depth:6, mul:3 },
+  desert: { find:20, depth:5, mul:4 },
+  ice:    { find:18, depth:6, mul:5.5 },
+  moon:   { find:16, depth:7, mul:7.5 },
 };
 // 最大スタミナ（強化Lvで増える）
 function getMaxStamina(){ return 100 + ((state.staminaLevel||1)-1)*25; }
@@ -1006,7 +1006,8 @@ function collectItem(){
   const isNew=!state.collected[key];
   state.collected[key]=(state.collected[key]||0)+1;
   state.totalGet++;
-  const coin=RARITY[buriedItem.r].coin + (isNew?20:0);
+  const mul=(DIFF[currentSite.id] && DIFF[currentSite.id].mul) || 1; // エリアが難しいほど多くもらえる
+  const coin=Math.round(RARITY[buriedItem.r].coin * mul) + (isNew?20:0);
   state.coins+=coin;
   save();
   showReward(buriedItem, isNew, coin);
