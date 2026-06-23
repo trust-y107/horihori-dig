@@ -381,6 +381,46 @@ const SITES = [
       {ic:"💰", nm:"沈没船の金庫", r:"epic", desc:"開ければ大金持ち…？"},
       {ic:"🔱", nm:"海神のほこ", r:"legend", desc:"海をおさめる者の証。"},
     ]},
+  { id:"desert", name:"ひみつの砂漠", emoji:"🏜️", grad:"linear-gradient(135deg,#e8b85f,#b9762e)",
+    desc:"古代文明のお宝が眠る", unlock:700,
+    items:[
+      {ic:"🦎", nm:"さばくトカゲ", r:"common", desc:"暑さに強い小さな相棒。"},
+      {ic:"🌵", nm:"サボテンのとげ", r:"common", desc:"ちくっと注意。"},
+      {ic:"🦴", nm:"動物のほね", r:"common", desc:"昔ここにいた生き物の。"},
+      {ic:"🫙", nm:"砂まみれのびん", r:"common", desc:"中は空っぽ。"},
+      {ic:"🪬", nm:"まよけのお守り", r:"rare", desc:"わざわいを払うという。"},
+      {ic:"🪙", nm:"砂金のコイン", r:"rare", desc:"砂に長く眠っていた。"},
+      {ic:"⚱️", nm:"ファラオの壺", r:"epic", desc:"王の墓から出たという壺。"},
+      {ic:"👁️", nm:"ホルスの目", r:"epic", desc:"見守りの神のしるし。"},
+      {ic:"🐍", nm:"黄金のコブラ像", r:"legend", desc:"王の宝のひとつ。"},
+    ]},
+  { id:"ice", name:"こおりの大地", emoji:"🏔️", grad:"linear-gradient(135deg,#a9d8ec,#5a8fb0)",
+    desc:"氷河期の生き物や宝石が眠る", unlock:1200,
+    items:[
+      {ic:"❄️", nm:"こおりのかけら", r:"common", desc:"きらきら冷たい。"},
+      {ic:"🐧", nm:"ペンギンの羽", r:"common", desc:"ふわっと軽い。"},
+      {ic:"🐟", nm:"こおった魚", r:"common", desc:"カチコチに凍っている。"},
+      {ic:"🪨", nm:"つめたい石", r:"common", desc:"さわると手が冷える。"},
+      {ic:"🦣", nm:"マンモスの牙", r:"rare", desc:"氷河期からのおくりもの。"},
+      {ic:"💙", nm:"ブルーダイヤ", r:"rare", desc:"氷のように澄んだ青。"},
+      {ic:"🧊", nm:"氷づけの宝石", r:"epic", desc:"氷の中で光っている。"},
+      {ic:"⛄", nm:"とけない魔法石", r:"epic", desc:"ずっと冷たいまま。"},
+      {ic:"🧝", nm:"氷の精霊のかけら", r:"legend", desc:"伝説の精霊のかけら。"},
+    ]},
+  { id:"moon", name:"つきのクレーター", emoji:"🌙", grad:"linear-gradient(135deg,#8e8e9a,#3a3a44)",
+    desc:"宇宙のナゾの遺物がねむる", unlock:2500,
+    items:[
+      {ic:"🪨", nm:"月の石", r:"common", desc:"ふわっと軽い灰色の石。"},
+      {ic:"⭐", nm:"小さな星くず", r:"common", desc:"ちいさく輝く。"},
+      {ic:"🔩", nm:"衛星のかけら", r:"common", desc:"人工衛星の部品らしい。"},
+      {ic:"🧶", nm:"宇宙人のおもちゃ", r:"common", desc:"用途はナゾ。"},
+      {ic:"☄️", nm:"いん石", r:"rare", desc:"宇宙から落ちてきた石。"},
+      {ic:"🚀", nm:"古いロケット部品", r:"rare", desc:"昔の探査機のもの？"},
+      {ic:"🛸", nm:"UFOのかけら", r:"epic", desc:"未確認飛行物体の破片。"},
+      {ic:"🔮", nm:"謎のクリスタル", r:"epic", desc:"中で星空がゆれている。"},
+      {ic:"🌌", nm:"銀河のかけら", r:"legend", desc:"手のひらの中の宇宙。"},
+      {ic:"👾", nm:"宇宙の遺物", r:"legend", desc:"だれが作ったのか…？"},
+    ]},
 ];
 
 // ===== セーブデータ =====
@@ -394,7 +434,7 @@ function load(){
   }catch(e){}
   return { coins:0, collected:{}, totalGet:0 };
 }
-function save(){ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }
+function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
 
 function itemKey(siteId,nm){ return siteId+"::"+nm; }
 
@@ -483,6 +523,9 @@ const SOIL = {
   ruins:  { g:['#b6a37c','#998663','#7c6b4e'], grain:[60,50,35],  spec:[235,228,205], stone:[150,140,120], hole:'#4f4530' },
   volcano:{ g:['#6e3b2e','#532519','#39160e'], grain:[12,6,4],    spec:[255,150,60],  stone:[60,45,40],   hole:'#190a06' },
   sea:    { g:['#4d7e90','#356073','#21465a'], grain:[10,25,35],  spec:[200,240,250], stone:[70,110,125], hole:'#142a36' },
+  desert: { g:['#e8c878','#d4a85a','#b8893f'], grain:[120,80,30], spec:[255,245,210], stone:[200,165,110], hole:'#7c5a2c' },
+  ice:    { g:['#d6ecf5','#aacfe2','#84b0cc'], grain:[120,150,170],spec:[255,255,255], stone:[180,210,225], hole:'#557d92' },
+  moon:   { g:['#9a9aa2','#7c7c86','#5e5e68'], grain:[20,20,26],  spec:[235,235,245], stone:[120,120,130], hole:'#2a2a30' },
 };
 // 採掘場ごとの難易度（find=見つかる範囲, depth=掘る深さ）
 const DIFF = {
@@ -491,6 +534,9 @@ const DIFF = {
   ruins:  { find:27, depth:3 },
   volcano:{ find:23, depth:4 },
   sea:    { find:19, depth:6 },
+  desert: { find:20, depth:5 },
+  ice:    { find:18, depth:6 },
+  moon:   { find:16, depth:7 },
 };
 // 最大スタミナ（強化Lvで増える）
 function getMaxStamina(){ return 100 + ((state.staminaLevel||1)-1)*25; }
@@ -1051,6 +1097,16 @@ document.getElementById('bgmBtn').style.opacity = state.bgmOff?'0.4':'1';
 // 最初のタップでBGM開始（ブラウザの自動再生制限を回避）
 function firstGesture(){ ensureCtx(); startBGM(); window.removeEventListener('pointerdown', firstGesture); }
 window.addEventListener('pointerdown', firstGesture);
+
+// 保存できない環境（プライベートモード等）を検知して知らせる
+(function(){
+  let ok=false;
+  try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); ok=true; }catch(e){}
+  if(!ok) setTimeout(()=>toast('⚠️ この開き方だとデータを保存できません（プライベートモードかも）'), 900);
+})();
+// 画面を閉じる/隠れる時にも保存（保険）
+window.addEventListener('pagehide', save);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') save(); });
 </script>
 </body>
 </html>
