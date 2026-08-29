@@ -279,6 +279,29 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 .sticky-cta .btn{width:100%;}
 @media(max-width:980px){ .sticky-cta{display:block;} footer{padding-bottom:110px;} }
 
+/* ---------- マスコット「テオルくん」 ---------- */
+.mascot{display:block; width:100%; height:auto;}
+.mascot-hero{width:158px; margin:16px 6px 0 auto;}
+@media(max-width:900px){ .mascot-hero{margin:16px auto 0;} }
+
+.lead-row{display:flex; align-items:center; justify-content:center; gap:20px; margin-top:40px;}
+.lead-row .mascot{width:124px; flex:none;}
+.lead-row .worry-lead{margin:0; flex:1;}
+.lead-row .worry-lead::before{top:50%; left:-14px; transform:translateY(-50%); border:14px solid transparent; border-right-color:var(--teal); border-left:0; border-bottom-color:transparent;}
+@media(max-width:680px){
+  .lead-row{flex-direction:column; gap:0;}
+  .lead-row .mascot{width:112px; margin-bottom:6px;}
+  .lead-row .worry-lead::before{top:-14px; left:50%; transform:translateX(-50%); border:14px solid transparent; border-bottom-color:var(--teal); border-top:0; border-right-color:transparent;}
+}
+
+.mascot-sign{display:flex; justify-content:flex-end; margin:-4px 0 0;}
+.mascot-sign figure{margin:0; width:132px; text-align:center;}
+.mascot-sign .mascot{width:100%;}
+.mascot-sign figcaption{font-size:12.5px; font-weight:700; color:var(--ink-2); margin-top:-4px;}
+@media(max-width:700px){ .mascot-sign{justify-content:center;} }
+
+.cta .mascot{width:120px; margin:0 auto 10px;}
+
 /* ---------- スクロール表示アニメーション ---------- */
 .js .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
 .js .reveal.is-visible{opacity:1; transform:none;}
@@ -287,6 +310,70 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 </head>
 <body>
 <script>document.documentElement.className+=' js';</script>
+
+<!-- ================================================================
+     マスコット「テオルくん」
+     公式のイラスト画像に差し替える場合は、この <svg> ブロックを削除し、
+     .mascot を使っている 4 箇所の <svg class="mascot">…</svg> を
+     <img class="mascot" src="img/teol-kun.png" alt="テオルくん"> に
+     置き換えてください。
+     ================================================================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="teolkun" viewBox="0 0 300 300">
+    <defs>
+      <clipPath id="tk-body"><ellipse cx="150" cy="214" rx="58" ry="53"/></clipPath>
+    </defs>
+    <!-- しっぽ -->
+    <path d="M198 246c48 12 84-10 82-42-1-18-16-26-28-18" fill="none" stroke="#E1874A" stroke-width="26" stroke-linecap="round"/>
+    <path d="M198 246c48 12 84-10 82-42-1-18-16-26-28-18" fill="none" stroke="#C96C36" stroke-width="26" stroke-dasharray="13 17" stroke-dashoffset="-20"/>
+    <!-- 耳 -->
+    <path d="M94 76 L68 24 L128 48 Z" fill="#E1874A" stroke="#E1874A" stroke-width="18" stroke-linejoin="round"/>
+    <path d="M206 76 L232 24 L172 48 Z" fill="#E1874A" stroke="#E1874A" stroke-width="18" stroke-linejoin="round"/>
+    <path d="M99 70 L82 39 L120 54 Z" fill="#F8E0BC" stroke="#F8E0BC" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M201 70 L218 39 L180 54 Z" fill="#F8E0BC" stroke="#F8E0BC" stroke-width="9" stroke-linejoin="round"/>
+    <!-- からだ -->
+    <ellipse cx="150" cy="214" rx="58" ry="53" fill="#E1874A"/>
+    <!-- あし -->
+    <rect x="110" y="242" width="34" height="31" rx="15.5" fill="#33646B"/>
+    <rect x="156" y="242" width="34" height="31" rx="15.5" fill="#33646B"/>
+    <!-- オーバーオール -->
+    <g clip-path="url(#tk-body)"><rect x="86" y="200" width="128" height="82" fill="#33646B"/></g>
+    <path d="M126 172h48a6 6 0 0 1 6 6v32h-60v-32a6 6 0 0 1 6-6z" fill="#33646B"/>
+    <path d="M133 177 L119 201" stroke="#33646B" stroke-width="10" stroke-linecap="round"/>
+    <path d="M167 177 L181 201" stroke="#33646B" stroke-width="10" stroke-linecap="round"/>
+    <!-- 右うで（手をふる） -->
+    <path d="M198 196c22-6 40-20 52-34" fill="none" stroke="#33646B" stroke-width="22" stroke-linecap="round"/>
+    <g fill="#33646B">
+      <circle cx="256" cy="154" r="14"/><circle cx="266" cy="144" r="6.5"/>
+      <circle cx="272" cy="154" r="6.5"/><circle cx="267" cy="164" r="6.5"/>
+    </g>
+    <!-- ショルダーバッグ -->
+    <path d="M180 172 L130 220" stroke="#2B5A60" stroke-width="9" stroke-linecap="round"/>
+    <rect x="108" y="210" width="46" height="38" rx="8" fill="#2E6068"/>
+    <path d="M106 216h50v-5a8 8 0 0 0-8-8h-34a8 8 0 0 0-8 8z" fill="#3A757D"/>
+    <circle cx="131" cy="226" r="5.5" fill="#7FC9B2"/>
+    <!-- あたま -->
+    <ellipse cx="150" cy="108" rx="78" ry="63" fill="#E1874A"/>
+    <ellipse cx="150" cy="132" rx="54" ry="34" fill="#FBEBD3"/>
+    <ellipse cx="119" cy="84" rx="11" ry="8" fill="#FBEBD3"/>
+    <ellipse cx="181" cy="84" rx="11" ry="8" fill="#FBEBD3"/>
+    <circle cx="121" cy="108" r="10" fill="#2E2A28"/>
+    <circle cx="179" cy="108" r="10" fill="#2E2A28"/>
+    <circle cx="124.5" cy="104.5" r="3.2" fill="#fff" opacity=".92"/>
+    <circle cx="182.5" cy="104.5" r="3.2" fill="#fff" opacity=".92"/>
+    <path d="M141 124q9-7 18 0 1 11-9 15-10-4-9-15z" fill="#2E2A28"/>
+    <path d="M150 142q-9 11-18 3" fill="none" stroke="#2E2A28" stroke-width="4" stroke-linecap="round"/>
+    <path d="M150 142q9 11 18 3" fill="none" stroke="#2E2A28" stroke-width="4" stroke-linecap="round"/>
+    <!-- 左うで＋スマホ（手前） -->
+    <path d="M112 204c-14-12-20-26-18-40" fill="none" stroke="#33646B" stroke-width="22" stroke-linecap="round"/>
+    <g transform="rotate(-9 82 150)">
+      <rect x="44" y="100" width="74" height="96" rx="13" fill="#33646B"/>
+      <rect x="53" y="112" width="56" height="72" rx="6" fill="#BFE3D2"/>
+      <path d="M66 148l11 12 22-27" fill="none" stroke="#2F8C74" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <ellipse cx="96" cy="172" rx="17" ry="13" fill="#33646B" transform="rotate(-9 96 172)"/>
+  </symbol>
+</svg>
 
 <header class="site-header">
   <div class="wrap">
@@ -318,6 +405,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <p class="hero-note">※ お申し込み・サービス内容の詳細は店頭スタッフまでお気軽にご相談ください。</p>
     </div>
 
+    <div class="hero-right">
     <div class="hero-card">
       <h3>3つのサポートメニュー</h3>
       <ul class="hero-list">
@@ -325,6 +413,8 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
         <li><span class="no">2</span><span><b>TeolPass+</b><small>操作・設定サポート／1,089円（税込）·月</small></span></li>
         <li><span class="no">3</span><span><b>Teolリモートサポート</b><small>遠隔サポート／660円（税込）·月〜</small></span></li>
       </ul>
+    </div>
+      <svg class="mascot mascot-hero" viewBox="0 0 300 300" aria-hidden="true"><use href="#teolkun"/></svg>
     </div>
   </div>
 </div>
@@ -351,7 +441,10 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <div class="worry"><div class="face">🔒</div><p>セキュリティが<br>不安になる</p></div>
       <div class="worry"><div class="face">🏃</div><p>そのたびに店舗へ<br>行くのが大変</p></div>
     </div>
-    <p class="worry-lead">その「困った」、Teolがまるごとサポートします。</p>
+    <div class="lead-row">
+      <svg class="mascot " viewBox="0 0 300 300" role="img" aria-label="テオルくん"><use href="#teolkun"/></svg>
+      <p class="worry-lead">その「困った」、Teolがまるごとサポートします。</p>
+    </div>
   </div>
 </section>
 
@@ -579,6 +672,13 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
     </div>
 
     <p class="table-note">※3 アカウント設定・SNS設定は1アカウントにつき1カウントです。　※表示価格はすべて税込です。</p>
+
+    <div class="mascot-sign">
+      <figure>
+        <svg class="mascot " viewBox="0 0 300 300" role="img" aria-label="テオルくん"><use href="#teolkun"/></svg>
+        <figcaption>テオルくん</figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -675,6 +775,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 <!-- ===================== CTA ===================== -->
 <section class="cta reveal">
   <div class="wrap">
+    <svg class="mascot " viewBox="0 0 300 300" aria-hidden="true"><use href="#teolkun"/></svg>
     <h2>スマホのお困りごとは、<br>Teolにおまかせください。</h2>
     <p>お申し込みは下のボタンから。ご不明な点は店頭スタッフがご案内します。</p>
     <a class="btn btn-lg btn-white" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込みページへ進む <span class="arrow">▶</span></a>
