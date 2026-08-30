@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Teol（テオル）｜スマホの操作・設定サポート｜TeolPass・TeolPass+・Teolリモートサポート</title>
+<meta name="description" content="Teol（テオル）は、スマートフォンの操作・設定・相談を月額制でサポートするサービスです。TeolPass（605円/月）、TeolPass+（1,089円/月）、Teolリモートサポート（遠隔サポート・660円/月〜）をご用意。大阪・兵庫のselectSIM各店で受付中。">
+<meta name="keywords" content="Teol,teol,TEOL,テオル,ておる,TeolPass,テオルパス,TeolPass+,Teolリモートサポート,スマホ サポート,スマートフォン 操作サポート,設定サポート,遠隔サポート,selectSIM">
+<link rel="canonical" href="https://teol.pages.dev/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#158D80">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Teol（テオル）">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://teol.pages.dev/">
+<meta property="og:title" content="Teol（テオル）｜スマホの操作・設定サポート">
+<meta property="og:description" content="月額制でスマートフォンの操作・設定・相談をサポート。TeolPass／TeolPass+／Teolリモートサポート。大阪・兵庫のselectSIM各店で受付中。">
+<meta property="og:image" content="https://teol.pages.dev/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Teol（テオル）｜スマホの操作・設定サポート">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://teol.pages.dev/ogp.png">
+<meta name="twitter:title" content="Teol（テオル）｜スマホの操作・設定サポート">
+<meta name="twitter:description" content="月額制でスマートフォンの操作・設定・相談をサポート。TeolPass／TeolPass+／Teolリモートサポート。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23158D80'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='40' font-weight='bold' fill='%23fff' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Teol ランディングページ
+   配色：TeolPass お申込み用紙に準拠（ティール／ダークネイビー）
+   ============================================================ */
+:root{
+  --teal:#158D80;        /* メインカラー */
+  --teal-dark:#0E6E63;   /* ホバー・強調 */
+  --teal-mid:#1AA091;
+  --teal-light:#E4F2EF;  /* カード背景 */
+  --teal-pale:#F3F9F8;   /* セクション背景 */
+  --navy:#2A323A;        /* 見出し帯・フッター */
+  --navy-2:#3C4650;
+  --ink:#2E353B;
+  --ink-2:#5F6B73;
+  --line:#DDE5E3;
+  --band:#E9EBEB;        /* グレー帯 */
+  --white:#FFFFFF;
+  --radius:12px;
+  --shadow:0 6px 22px rgba(20,60,55,.07);
+  --shadow-lg:0 14px 38px rgba(20,60,55,.14);
+  --maxw:1080px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:72px;}
+body{
+  margin:0; color:var(--ink); background:var(--white);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Meiryo",sans-serif;
+  font-size:16px; line-height:1.85; letter-spacing:.02em;
+  -webkit-font-smoothing:antialiased; text-size-adjust:100%;
+}
+img{max-width:100%; display:block;}
+a{color:inherit;}
+.wrap{width:100%; max-width:var(--maxw); margin:0 auto; padding:0 20px;}
+
+/* ---------- ヘッダー ---------- */
+.site-header{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.94); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+.site-header .wrap{display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px;}
+.logo{font-family:"Zen Maru Gothic","Zen Kaku Gothic New",sans-serif; font-weight:900; font-size:26px; letter-spacing:.04em; color:var(--navy); text-decoration:none; line-height:1;}
+.logo span{color:var(--teal);}
+.nav{display:flex; align-items:center; gap:22px;}
+.nav .nav-link{font-size:14px; font-weight:700; text-decoration:none; color:var(--ink-2);}
+.nav .nav-link:hover{color:var(--teal-dark);}
+@media(max-width:980px){ .nav .nav-link{display:none;} }
+
+/* ---------- ボタン ---------- */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; font-weight:700; text-decoration:none; border:none; cursor:pointer; padding:15px 30px; border-radius:999px; font-size:16px; line-height:1.4; transition:transform .18s ease, box-shadow .18s ease, background-color .18s ease;}
+.btn-primary{background:var(--teal); color:#fff; box-shadow:0 5px 0 var(--teal-dark), 0 12px 24px rgba(14,110,99,.24);}
+.btn-primary:hover{background:var(--teal-dark); transform:translateY(2px); box-shadow:0 3px 0 #0a544c, 0 10px 20px rgba(14,110,99,.24);}
+.btn-ghost{background:#fff; color:var(--teal-dark); border:2px solid var(--teal); }
+.btn-ghost:hover{background:var(--teal-light);}
+.btn-sm{padding:11px 22px; font-size:14px; box-shadow:0 4px 0 var(--teal-dark);}
+.btn-lg{padding:19px 46px; font-size:19px;}
+.btn .arrow{font-size:.9em;}
+
+/* ---------- ヒーロー ---------- */
+.hero{position:relative; overflow:hidden; background:var(--teal-pale); padding:76px 0 88px;}
+.hero::before{content:""; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 300px 300px 0; border-color:transparent var(--navy) transparent transparent; opacity:.96;}
+.hero::after{content:""; position:absolute; width:320px; height:320px; border-radius:50%; background:var(--teal-light); bottom:-130px; left:-110px;}
+.hero .wrap{position:relative; z-index:1; display:grid; grid-template-columns:1.12fr .88fr; gap:48px; align-items:center;}
+.eyebrow{display:inline-block; background:var(--white); color:var(--teal-dark); font-size:13px; font-weight:700; padding:7px 16px; border-radius:6px; box-shadow:var(--shadow); margin-bottom:22px;}
+.hero h1 rt{font-size:15px; font-weight:700; color:var(--teal-dark); letter-spacing:.14em; font-family:"Zen Kaku Gothic New",sans-serif;}
+.hero h1{font-family:"Zen Maru Gothic",sans-serif; font-size:64px; line-height:1.1; margin:0 0 8px; letter-spacing:.02em; color:var(--teal);}
+.hero h1 .dot{color:var(--navy);}
+.hero .tagline{font-size:14px; font-weight:700; color:var(--teal-dark); margin:0 0 22px; letter-spacing:.14em;}
+.hero h2{font-size:30px; line-height:1.5; margin:0 0 18px; font-weight:900; color:var(--navy);}
+.hero h2 em{font-style:normal; background:linear-gradient(transparent 62%, #B9E3DC 62%);}
+.hero p{font-size:16px; color:var(--ink-2); margin:0 0 30px;}
+.hero-actions{display:flex; flex-wrap:wrap; gap:14px;}
+.hero-note{font-size:13px; color:var(--ink-2); margin-top:16px;}
+
+.hero-card{background:#fff; border-radius:14px; padding:26px; box-shadow:var(--shadow-lg); border-top:5px solid var(--teal);}
+.hero-card h3{margin:0 0 16px; font-size:15px; font-weight:700; color:var(--ink-2); letter-spacing:.08em;}
+.hero-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px;}
+.hero-list li{display:flex; align-items:center; gap:13px; background:var(--teal-pale); border-radius:8px; padding:13px 15px;}
+.hero-list .no{flex:none; width:28px; height:28px; border-radius:50%; background:var(--teal); color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+.hero-list b{display:block; font-size:15px; line-height:1.5;}
+.hero-list small{display:block; font-size:12.5px; color:var(--ink-2); line-height:1.5;}
+
+@media(max-width:900px){
+  .hero{padding:52px 0 62px;}
+  .hero::before{border-width:0 180px 180px 0;}
+  .hero .wrap{grid-template-columns:1fr; gap:34px;}
+  .hero h1{font-size:50px;}
+  .hero h2{font-size:23px;}
+}
+
+/* ---------- サービス概要バンド（用紙のグレー帯を再現） ---------- */
+.band{background:var(--band); padding:20px 0;}
+.band .wrap{display:flex; flex-wrap:wrap; align-items:center; gap:8px 22px;}
+.band .ttl{display:flex; align-items:center; gap:11px; font-weight:700; font-size:16px; color:var(--navy); white-space:nowrap;}
+.band .ttl::before{content:""; width:14px; height:14px; background:var(--teal); flex:none;}
+.band p{margin:0; font-size:15px; color:var(--ink);}
+
+/* ---------- セクション共通 ---------- */
+section{padding:84px 0;}
+.sec-pale{background:var(--teal-pale);}
+.sec-head{margin:0 0 44px;}
+.sec-head .label{display:block; font-size:13px; font-weight:700; color:var(--teal); letter-spacing:.16em; margin-bottom:10px;}
+.sec-head h2{font-size:33px; line-height:1.4; margin:0; font-weight:900; color:var(--navy);}
+.sec-head p{color:var(--ink-2); font-size:15.5px; margin:14px 0 0;}
+.sec-head.center{text-align:center;}
+.sp-br{display:inline;}
+@media(max-width:900px){ section{padding:58px 0;} .sec-head h2{font-size:25px;} }
+
+/* 用紙の「■ 見出し」スタイル */
+.bar-head{display:flex; align-items:center; gap:16px; padding-bottom:20px; border-bottom:3px solid var(--line); margin:0 0 34px;}
+.bar-head::before{content:""; width:9px; height:38px; background:var(--teal); flex:none;}
+.bar-head h2{font-family:"Zen Maru Gothic",sans-serif; font-size:34px; margin:0; line-height:1.2; letter-spacing:.04em; color:var(--navy);}
+@media(max-width:900px){ .bar-head h2{font-size:24px;} .bar-head::before{height:28px; width:7px;} }
+
+/* 用紙のダークバー見出し */
+.dark-bar{display:flex; align-items:stretch; margin:0 0 34px; border-radius:4px; overflow:hidden;}
+.dark-bar .sq{width:74px; background:var(--teal); flex:none;}
+.dark-bar .tx{flex:1; background:var(--navy); color:#fff; font-weight:700; font-size:18px; padding:13px 22px; border-left:6px solid var(--teal-mid);}
+@media(max-width:620px){ .dark-bar .sq{width:26px;} .dark-bar .tx{font-size:15px; padding:11px 15px;} }
+
+/* 小見出しタグ（用紙の緑タグ） */
+.tag-head{display:inline-block; background:var(--teal); color:#fff; font-size:14px; font-weight:700; padding:6px 20px; border-radius:5px; margin-bottom:16px; letter-spacing:.04em;}
+
+/* ---------- お悩み ---------- */
+.worry-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+.worry{background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:26px 22px; text-align:center;}
+.worry .ic{width:58px; height:58px; border-radius:50%; background:var(--teal-light); display:flex; align-items:center; justify-content:center; margin:0 auto 14px;}
+.worry .ic svg{width:30px; height:30px; fill:none; stroke:var(--teal); stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
+.worry .ic svg .dot{fill:var(--teal); stroke:none;}
+.worry p{margin:0; font-size:15.5px; font-weight:700; line-height:1.65;}
+.worry-lead{margin:40px auto 0; max-width:780px; text-align:center; background:var(--teal); color:#fff; border-radius:var(--radius); padding:22px 24px; font-size:19px; font-weight:700; position:relative;}
+.worry-lead::before{content:""; position:absolute; top:-14px; left:50%; transform:translateX(-50%); border:14px solid transparent; border-bottom-color:var(--teal); border-top:0;}
+@media(max-width:860px){ .worry-grid{grid-template-columns:1fr;} .worry-lead{font-size:16px;} }
+
+/* ---------- プラン ---------- */
+.plans{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch;}
+.plan{position:relative; background:#fff; border:2px solid var(--line); border-radius:14px; padding:34px 24px 26px; display:flex; flex-direction:column; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;}
+.plan:hover{transform:translateY(-5px); box-shadow:var(--shadow-lg); border-color:var(--teal);}
+.plan.featured{border-color:var(--teal); box-shadow:var(--shadow-lg);}
+.plan .tag{position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--teal); color:#fff; font-size:12.5px; font-weight:700; padding:6px 18px; border-radius:999px; white-space:nowrap;}
+.plan.plain .tag{background:var(--navy-2);}
+.plan h3{font-family:"Zen Maru Gothic",sans-serif; font-size:30px; margin:0 0 4px; line-height:1.25; color:var(--navy);}
+.plan h3 .plus{color:var(--teal);}
+.plan .role{display:inline-block; font-size:13px; font-weight:700; color:var(--teal-dark); background:var(--teal-light); border-radius:5px; padding:4px 13px; margin-bottom:18px;}
+.plan .price{display:flex; align-items:baseline; gap:4px; margin:0 0 18px; padding-bottom:18px; border-bottom:1px dashed var(--line);}
+.plan .price .num{font-family:"Zen Maru Gothic",sans-serif; font-size:42px; font-weight:900; color:var(--teal); line-height:1;}
+.plan .price .unit{font-size:15px; font-weight:700; color:var(--ink-2);}
+.plan .price .free{font-family:"Zen Maru Gothic",sans-serif; font-size:26px; font-weight:900; color:var(--navy); line-height:1.3;}
+.plan ul{list-style:none; margin:0 0 20px; padding:0; display:flex; flex-direction:column; gap:10px; flex:1;}
+.plan ul li{display:flex; gap:9px; font-size:15px; line-height:1.6; font-weight:700;}
+.plan ul li.off{color:#A9B2B8; font-weight:500;}
+.plan ul li::before{content:""; flex:none; width:19px; height:19px; margin-top:4px; border-radius:4px; background:var(--teal) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='4,13 10,19 20,6'/></svg>") center/12px 12px no-repeat;}
+.plan ul li.off::before{background:#DCE2E4; border-radius:4px;}
+.plan .bonus{background:var(--teal-pale); border-radius:8px; padding:14px 16px; margin-bottom:20px;}
+.plan .bonus h4{margin:0 0 9px; font-size:13.5px; font-weight:700; color:var(--teal-dark);}
+.plan .bonus dl{display:grid; grid-template-columns:56px 1fr; gap:7px 10px; margin:0; font-size:13px; line-height:1.55;}
+.plan .bonus dt{font-weight:700; color:var(--teal-dark);}
+.plan .bonus dd{margin:0; color:var(--ink);}
+.plan .bonus .strike{text-decoration:line-through; color:var(--ink-2);}
+.plan .fine{font-size:12px; color:var(--ink-2); line-height:1.65; margin:0 0 18px;}
+.plan .btn{width:100%;}
+@media(max-width:960px){ .plans{grid-template-columns:1fr; gap:34px;} }
+.plan-note{margin:28px 0 0; font-size:12.5px; color:var(--ink-2); line-height:1.8;}
+
+/* ---------- リモートサポート（サポート内容アイコン） ---------- */
+.remote-intro{font-size:17px; font-weight:700; line-height:1.9; margin:0 0 34px;}
+.chip{display:inline-block; background:var(--teal-mid); color:#fff; font-family:"Zen Maru Gothic",sans-serif; font-size:19px; font-weight:700; padding:10px 30px; border-radius:6px; margin-bottom:26px; letter-spacing:.06em;}
+.support-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:22px 40px; margin:0 0 52px;}
+.support-item{display:flex; align-items:center; gap:16px;}
+.support-item .ic{flex:none; width:46px; height:46px; border-radius:50%; background:var(--teal); display:flex; align-items:center; justify-content:center;}
+.support-item.soft .ic{background:#8FCCC3;}
+.support-item .ic svg{width:24px; height:24px; fill:#fff;}
+.support-item span{font-family:"Zen Maru Gothic",sans-serif; font-size:20px; font-weight:700; line-height:1.5; color:var(--navy);}
+@media(max-width:820px){ .support-grid{grid-template-columns:1fr; gap:16px;} .support-item span{font-size:16.5px;} .support-item .ic{width:40px; height:40px;} .support-item .ic svg{width:21px; height:21px;} }
+
+.price-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+.price-card{background:var(--teal-light); padding:34px 20px; text-align:center; border-radius:6px;}
+.price-card h3{font-family:"Zen Maru Gothic",sans-serif; font-size:29px; margin:0 0 14px; line-height:1.3; color:var(--navy);}
+.price-card .amount{font-family:"Zen Maru Gothic",sans-serif; font-size:52px; font-weight:900; color:var(--teal); line-height:1; letter-spacing:.02em;}
+.price-card .meta{font-size:14px; color:var(--ink-2); margin-left:8px; white-space:nowrap;}
+.price-caption{text-align:center; font-size:13.5px; color:var(--ink-2); margin:22px 0 0;}
+@media(max-width:820px){ .price-grid{grid-template-columns:1fr; gap:18px;} .price-card h3{font-size:22px;} .price-card .amount{font-size:42px;} }
+
+/* ---------- サポートメニュー一覧 ---------- */
+.table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; border:2px solid var(--teal); border-radius:6px; background:#fff;}
+table.menu{border-collapse:collapse; width:100%; min-width:640px; font-size:14px;}
+table.menu th, table.menu td{padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left;}
+table.menu thead th{background:var(--teal-light); color:var(--navy); font-weight:700; font-size:14px; white-space:nowrap; border-bottom:2px solid var(--teal);}
+table.menu thead th.cat{font-size:16px;}
+table.menu td.num, table.menu th.num{text-align:center; white-space:nowrap; width:120px;}
+table.menu td.free{color:var(--teal); font-weight:700;}
+table.menu td ul{margin:0; padding-left:1.1em; display:grid; grid-template-columns:repeat(2,1fr); gap:2px 18px;}
+table.menu td li{line-height:1.7;}
+table.menu tr:last-child td{border-bottom:none;}
+.table-note{font-size:12.5px; color:var(--ink-2); margin:14px 0 0; line-height:1.8;}
+@media(max-width:700px){ table.menu td ul{grid-template-columns:1fr;} }
+.scroll-hint{display:none; font-size:12.5px; color:var(--ink-2); margin:0 0 8px;}
+@media(max-width:760px){ .scroll-hint{display:block;} }
+
+/* ---------- 2カラム情報ボックス ---------- */
+.info-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+.info-box{background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:26px;}
+.info-box p{margin:0 0 10px;}
+.info-box p:last-child{margin-bottom:0;}
+.info-box .big{font-size:21px; font-weight:700; line-height:1.6; color:var(--navy);}
+.info-box .big b{color:var(--teal);}
+.info-box .kaisu{font-family:"Zen Maru Gothic",sans-serif; font-size:30px; font-weight:900; color:var(--navy);}
+.info-box .kaisu small{font-size:15px; color:var(--ink-2); font-family:inherit;}
+.info-box ol{margin:0; padding-left:1.4em; font-size:14.5px; line-height:1.85;}
+.info-box ol li{margin-bottom:6px;}
+.info-box .note{font-size:12.5px; color:var(--ink-2);}
+@media(max-width:860px){ .info-grid{grid-template-columns:1fr;} }
+
+/* ---------- ご利用の流れ ---------- */
+.steps{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+.step{background:#fff; border-radius:var(--radius); padding:28px 20px; text-align:center; box-shadow:var(--shadow); position:relative;}
+.step .num{display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:var(--teal); color:#fff; font-family:"Zen Maru Gothic",sans-serif; font-size:20px; font-weight:900; margin-bottom:14px;}
+.step h3{font-size:17px; margin:0 0 8px; color:var(--navy);}
+.step p{font-size:14px; color:var(--ink-2); margin:0;}
+.step:not(:last-child)::after{content:""; position:absolute; top:50%; right:-13px; width:0; height:0; border:8px solid transparent; border-left-color:#9FD3CB; transform:translateY(-50%);}
+@media(max-width:860px){ .steps{grid-template-columns:1fr 1fr;} .step:not(:last-child)::after{display:none;} }
+@media(max-width:480px){ .steps{grid-template-columns:1fr;} }
+
+/* ---------- FAQ ---------- */
+.faq{max-width:820px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
+.faq details{background:#fff; border:2px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+.faq details[open]{border-color:var(--teal);}
+.faq summary{list-style:none; cursor:pointer; padding:20px 54px 20px 22px; font-weight:700; font-size:16px; position:relative; color:var(--navy);}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::before{content:"Q"; color:var(--teal); font-family:"Zen Maru Gothic",sans-serif; font-weight:900; margin-right:12px;}
+.faq summary::after{content:""; position:absolute; right:22px; top:50%; width:11px; height:11px; border-right:3px solid var(--teal); border-bottom:3px solid var(--teal); transform:translateY(-70%) rotate(45deg); transition:transform .2s ease;}
+.faq details[open] summary::after{transform:translateY(-25%) rotate(225deg);}
+.faq .a{padding:0 22px 22px 52px; font-size:15px; color:var(--ink-2); position:relative;}
+.faq .a::before{content:"A"; position:absolute; left:22px; top:0; color:var(--ink-2); font-family:"Zen Maru Gothic",sans-serif; font-weight:900;}
+
+/* ---------- CTA ---------- */
+.cta{background:linear-gradient(135deg,#1AA091 0%,#0E6E63 100%); color:#fff; text-align:center;}
+.cta h2{font-family:"Zen Maru Gothic",sans-serif; font-size:34px; margin:0 0 14px; line-height:1.4;}
+.cta p{font-size:16px; margin:0 0 32px; opacity:.96;}
+.cta .btn-white{background:#fff; color:var(--teal-dark); box-shadow:0 5px 0 rgba(0,0,0,.14), 0 14px 30px rgba(0,0,0,.16);}
+.cta .btn-white:hover{background:var(--teal-light); transform:translateY(2px); box-shadow:0 3px 0 rgba(0,0,0,.14);}
+.cta small{display:block; margin-top:20px; font-size:13px; opacity:.9;}
+@media(max-width:900px){ .cta h2{font-size:24px;} }
+
+/* ---------- 店舗（問い合わせ先） ---------- */
+.area-head{display:flex; align-items:center; gap:12px; font-size:19px; font-weight:700; color:var(--navy); margin:0 0 18px;}
+.area-head::before{content:""; width:12px; height:12px; background:var(--teal);}
+.area-block + .area-block{margin-top:44px;}
+.shops{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;}
+.shop{background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:24px; transition:border-color .2s ease;}
+.shop:hover{border-color:var(--teal);}
+.shop h3{font-size:19px; margin:0 0 14px; display:flex; align-items:center; gap:9px; color:var(--navy); line-height:1.4;}
+.shop h3::before{content:""; flex:none; width:7px; height:22px; background:var(--teal);}
+.shop dl{margin:0; display:grid; grid-template-columns:78px 1fr; gap:9px 12px; font-size:14.5px;}
+.shop dt{color:var(--ink-2); font-weight:700;}
+.shop dd{margin:0;}
+.shop dd a{color:var(--teal-dark); font-weight:700; text-decoration:none;}
+.shop dd a:hover{text-decoration:underline;}
+.contact-note{margin:36px auto 0; max-width:820px; text-align:center; font-size:14.5px; color:var(--ink-2);}
+
+/* ---------- フッター ---------- */
+footer{background:var(--navy); color:#fff; padding:44px 0 96px; text-align:center;}
+footer .logo{color:#fff; display:inline-block; margin-bottom:14px;}
+footer .fnav{display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:center; margin:0 0 20px; padding:0; list-style:none; font-size:14px;}
+footer .fnav a{color:#fff; opacity:.82; text-decoration:none;}
+footer .fnav a:hover{opacity:1;}
+footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
+
+/* ---------- スマホ固定CTA ---------- */
+.sticky-cta{position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(255,255,255,.96); backdrop-filter:blur(10px); border-top:1px solid var(--line); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); display:none;}
+.sticky-cta .btn{width:100%;}
+@media(max-width:980px){ .sticky-cta{display:block;} footer{padding-bottom:110px;} }
+
+/* ---------- スクロール表示アニメーション ---------- */
+.js .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+.js .reveal.is-visible{opacity:1; transform:none;}
+@media(prefers-reduced-motion:reduce){ .js .reveal{opacity:1; transform:none; transition:none;} html{scroll-behavior:auto;} }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://teol.pages.dev/#website",
+      "url": "https://teol.pages.dev/",
+      "name": "Teol（テオル）",
+      "alternateName": ["Teol", "teol", "TEOL", "テオル", "ておる", "テオルパス", "TeolPass"],
+      "inLanguage": "ja"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://teol.pages.dev/#service",
+      "name": "Teol（テオル）",
+      "alternateName": ["Teol", "teol", "テオル", "ておる"],
+      "serviceType": "スマートフォン操作・設定サポート",
+      "description": "Teol（テオル）は、スマートフォンの操作・設定・相談を月額制でサポートするサービスです。TeolPass（操作サポート）、TeolPass+（操作・設定サポート）、Teolリモートサポート（遠隔サポート）をご用意しています。",
+      "areaServed": ["大阪府", "兵庫県"],
+      "url": "https://teol.pages.dev/",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Teol 取扱いサービス",
+        "itemListElement": [
+          { "@type": "Offer", "name": "TeolPass（操作サポート）", "price": "605", "priceCurrency": "JPY", "description": "月額605円（税込）の操作サポート" },
+          { "@type": "Offer", "name": "TeolPass+（操作・設定サポート）", "price": "1089", "priceCurrency": "JPY", "description": "月額1,089円（税込）の操作・設定サポート" },
+          { "@type": "Offer", "name": "Teolリモートサポート（遠隔サポート・単体契約）", "price": "660", "priceCurrency": "JPY", "description": "月額660円（税込）。TeolPass+加入者はセット価格330円（税込）" }
+        ]
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "selectSIM",
+        "department": [
+    {
+      "@type": "LocalBusiness",
+      "name": "selectSIM かみしんプラザ店",
+      "telephone": "+81-6-6711-4450",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "JP",
+        "postalCode": "533-0015",
+        "addressRegion": "大阪府",
+        "addressLocality": "大阪市東淀川区",
+        "streetAddress": "大隅1-6-12 かみしんプラザ2F"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": "selectSIM 布施店",
+      "telephone": "+81-6-6782-9880",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "JP",
+        "postalCode": "577-0056",
+        "addressRegion": "大阪府",
+        "addressLocality": "東大阪市",
+        "streetAddress": "長堂1-8-37 ヴェル・ノール布施1F"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": "selectSIM 湊川プラザ店",
+      "telephone": "+81-78-599-6180",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "JP",
+        "postalCode": "652-0032",
+        "addressRegion": "兵庫県",
+        "addressLocality": "神戸市兵庫区",
+        "streetAddress": "荒田町2-18-20 湊川プラザ1F"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": "selectSIM アピア逆瀬川店",
+      "telephone": "+81-797-61-7999",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "JP",
+        "postalCode": "665-0035",
+        "addressRegion": "兵庫県",
+        "addressLocality": "宝塚市",
+        "streetAddress": "逆瀬川1-2-1 アピアさかせがわ1-2F"
+      }
+    }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://teol.pages.dev/#faq",
+      "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Teolは何と読みますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "「テオル」と読みます。ひらがなでは「ておる」です。スマートフォンの操作・設定・相談を月額制でサポートするサービスの名称です。" }
+    },
+    {
+      "@type": "Question",
+      "name": "申し込みはどこからできますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "お申し込みページ（https://apply.fm/trust-effort/）から、またはお近くの店舗でお手続きいただけます。" }
+    },
+    {
+      "@type": "Question",
+      "name": "TeolPassとTeolPass+の違いは何ですか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "TeolPass（605円/月・税込）は「操作サポート」で、操作説明メニューを無料でご利用いただけます。TeolPass+（1,089円/月・税込）は「操作・設定サポート」で、データ移行を含む設定メニューも無料でご利用いただけます。継続特典の内容も異なります。" }
+    },
+    {
+      "@type": "Question",
+      "name": "Teolリモートサポートはどんなサポートを受けられますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "スマートフォンやタブレット等の操作方法や設定について、画面共有等の遠隔サポートを通じてご案内します。基本操作、アプリの操作・設定、LINE・メールの操作・設定、Wi-Fi接続設定のご案内、セキュリティなど、スマートフォン操作に関するご相談に対応しています。" }
+    },
+    {
+      "@type": "Question",
+      "name": "TeolPass+に加入していると、リモートサポートは安くなりますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "Teolリモートサポートは単体契約で月額660円（税込）ですが、TeolPass+にご加入の場合はセット価格の月額330円（税込）でご利用いただけます。" }
+    }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<script>document.documentElement.className+=' js';</script>
+
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top">Teol<span>.</span></a>
+    <nav class="nav">
+      <a class="nav-link" href="#service">サービス</a>
+      <a class="nav-link" href="#remote">リモートサポート</a>
+      <a class="nav-link" href="#menu">サポートメニュー</a>
+      <a class="nav-link" href="#faq">よくあるご質問</a>
+      <a class="nav-link" href="#contact">お問い合わせ</a>
+      <a class="btn btn-primary btn-sm" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込み</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== ヒーロー ===================== -->
+<div class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">店舗でお取り扱い中のサポートサービス</span>
+      <h1><ruby>Teol<rp>（</rp><rt>テオル</rt><rp>）</rp></ruby><span class="dot">.</span></h1>
+      <p class="tagline">SMARTPHONE SUPPORT SERVICE</p>
+      <h2>スマホの「わからない」を、<br><em>まるごとサポート。</em></h2>
+      <p>基本操作から各種設定、画面共有等による遠隔サポートまで。<br>月額制で、スマートフォンのお困りごとをいつでもご相談いただけます。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込みはこちら <span class="arrow">▶</span></a>
+        <a class="btn btn-ghost btn-lg" href="#service">サービスを見る</a>
+      </div>
+      <p class="hero-note">※ お申し込み・サービス内容の詳細は店頭スタッフまでお気軽にご相談ください。</p>
+    </div>
+
+    <div class="hero-card">
+      <h3>3つのサポートメニュー</h3>
+      <ul class="hero-list">
+        <li><span class="no">1</span><span><b>TeolPass</b><small>操作サポート／605円（税込）·月</small></span></li>
+        <li><span class="no">2</span><span><b>TeolPass+</b><small>操作・設定サポート／1,089円（税込）·月</small></span></li>
+        <li><span class="no">3</span><span><b>Teolリモートサポート</b><small>遠隔サポート／660円（税込）·月〜</small></span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="band">
+  <div class="wrap">
+    <span class="ttl">サービス内容について</span>
+    <p>Teol（テオル）は、月額制でスマートフォンの操作・設定・相談サポートを提供するサービスです。</p>
+  </div>
+</div>
+
+<!-- ===================== お悩み ===================== -->
+<section class="sec-pale reveal">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="label">CHECK</span>
+      <h2>スマホのこと、<br class="sp-br">こんなお困りごとはありませんか？</h2>
+    </div>
+    <div class="worry-grid">
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.4"/><path d="M10.1 8.6a1.95 1.95 0 1 1 2.7 1.85c-.55.25-.85.72-.85 1.3v.35"/><circle class="dot" cx="11.95" cy="15.1" r="1"/></svg></span>
+        <p>操作の仕方が<br>よくわからない</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.2" y="3.2" width="7.6" height="7.6" rx="1.8"/><rect x="13.2" y="3.2" width="7.6" height="7.6" rx="1.8"/><rect x="3.2" y="13.2" width="7.6" height="7.6" rx="1.8"/><rect x="13.2" y="13.2" width="7.6" height="7.6" rx="1.8"/></svg></span>
+        <p>アプリの入れ方・<br>使い方を教えてほしい</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 11.4c0 4.4-3.9 7.9-8.8 7.9-.9 0-1.7-.1-2.5-.3L4.2 21l1.4-4.1a7.6 7.6 0 0 1-2.4-5.5c0-4.4 4-7.9 8.8-7.9s8.8 3.5 8.8 7.9z"/><circle class="dot" cx="8.4" cy="11.3" r="1.15"/><circle class="dot" cx="12" cy="11.3" r="1.15"/><circle class="dot" cx="15.6" cy="11.3" r="1.15"/></svg></span>
+        <p>LINEやメールの<br>設定でつまずく</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.6 9h15.2"/><path d="M16.2 6.2 19 9l-2.8 2.8"/><path d="M20.4 15H5.2"/><path d="M7.8 12.2 5 15l2.8 2.8"/></svg></span>
+        <p>機種変更のデータ移行が<br>不安</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.8 4.6 5.9v5.4c0 4.5 3 7.9 7.4 9.4 4.4-1.5 7.4-4.9 7.4-9.4V5.9L12 2.8z"/><path d="M9 11.9l2.2 2.2 4-4.2"/></svg></span>
+        <p>セキュリティが<br>不安になる</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.6 6.6 4.1 3h15.8l1.5 3.6a3 3 0 0 1-5.8 1 3 3 0 0 1-5.4 0 3 3 0 0 1-5.8-1z"/><path d="M4.2 10.6V21h15.6V10.6"/><path d="M2.8 21h18.4"/><path d="M9.8 21v-5.6h4.4V21"/></svg></span>
+        <p>そのたびに店舗へ<br>行くのが大変</p>
+      </div>
+    </div>
+    <p class="worry-lead">その「困った」、Teolがまるごとサポートします。</p>
+  </div>
+</section>
+
+<!-- ===================== プラン ===================== -->
+<section id="service" class="reveal">
+  <div class="wrap">
+    <div class="dark-bar">
+      <span class="sq"></span>
+      <span class="tx">サポートのご利用頻度にあわせてプランをお選びいただけます。</span>
+    </div>
+
+    <div class="plans">
+      <!-- TeolPass+ -->
+      <article class="plan featured">
+        <span class="tag">いちばん安心のフルサポート</span>
+        <h3>TeolPass<span class="plus">+</span></h3>
+        <span class="role">操作・設定サポート</span>
+        <p class="price"><span class="num">1,089</span><span class="unit">円 / 月</span></p>
+        <ul>
+          <li>1回 / 30分（1日1回）</li>
+          <li>ご利用回数制限なし</li>
+          <li>定期点検</li>
+          <li>設定メニューもすべて無料</li>
+        </ul>
+        <div class="bonus">
+          <h4>継続特典</h4>
+          <dl>
+            <dt>6ヶ月</dt><dd>ガラスコーティング<br><span class="strike">6,600円</span> → <b>0円</b></dd>
+            <dt>12ヶ月</dt><dd>最大10,000円 還元クーポン<span class="note">※2</span></dd>
+            <dt>24ヶ月</dt><dd>最大20,000円 還元クーポン<span class="note">※2</span></dd>
+          </dl>
+        </div>
+        <a class="btn btn-primary" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込み</a>
+      </article>
+
+      <!-- TeolPass -->
+      <article class="plan">
+        <span class="tag">まずは操作サポートから</span>
+        <h3>TeolPass</h3>
+        <span class="role">操作サポート</span>
+        <p class="price"><span class="num">605</span><span class="unit">円 / 月</span></p>
+        <ul>
+          <li>1回 / 30分（1日1回）</li>
+          <li>ご利用回数制限なし</li>
+          <li>定期点検</li>
+          <li>操作説明メニューが無料</li>
+        </ul>
+        <div class="bonus">
+          <h4>継続特典</h4>
+          <dl>
+            <dt>6ヶ月</dt><dd>ノベルティプレゼント<br><b>3,000円分相当</b></dd>
+            <dt>12ヶ月</dt><dd>最大5,000円 還元クーポン<span class="note">※2</span></dd>
+            <dt>24ヶ月</dt><dd>最大10,000円 還元クーポン<span class="note">※2</span></dd>
+          </dl>
+        </div>
+        <a class="btn btn-primary" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込み</a>
+      </article>
+
+      <!-- お申込みなし -->
+      <article class="plan plain">
+        <span class="tag">スポットでご利用の方へ</span>
+        <h3>お申込みなし</h3>
+        <span class="role">都度お支払い<span style="font-size:11px">※1</span></span>
+        <p class="price"><span class="free">都度お支払い</span></p>
+        <ul>
+          <li>1回 / 30分（1日1回）</li>
+          <li class="off">ご利用回数制限なし</li>
+          <li class="off">定期点検</li>
+          <li class="off">継続特典</li>
+        </ul>
+        <p class="fine">
+          ※1 対象メニューは下表「サポートメニュー一覧」をご確認ください。<br>
+          ※ お支払い金額はデータ移行 3,960円（税込）、それ以外のサポートはそれぞれ1項目ごとに 1,100円（税込）です。<br>
+          ※ アカウント設定・SNS設定は1アカウントにつき1カウントです。
+        </p>
+        <a class="btn btn-ghost" href="#menu">サポートメニューを見る</a>
+      </article>
+    </div>
+
+    <p class="plan-note">※2 対象お手続きに応じて適用還元額はお手続き内容により変動します。　※特典の詳細や利用条件は店舗スタッフにご確認ください。　※表示価格はすべて税込です。</p>
+  </div>
+</section>
+
+<!-- ============ Teolリモートサポート 詳細 ============ -->
+<section id="remote" class="sec-pale reveal">
+  <div class="wrap">
+    <div class="bar-head">
+      <h2>Teolリモートサポート</h2>
+    </div>
+
+    <p class="remote-intro">本サービスは、スマートフォンやタブレット等の操作方法や設定について画面共有等の遠隔サポートを通じてご案内するサービスです。</p>
+
+    <span class="chip">サポート内容</span>
+
+    <div class="support-grid">
+      <div class="support-item soft">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h6a2 2 0 0 1 2 2v16l-4-3-4 3V3z" opacity=".95"/><path d="M14 3h6v18l-4-3-2 1.5V5a2 2 0 0 0-.6-1.4L14 3z" opacity=".55"/></svg></span>
+        <span>基本操作</span>
+      </div>
+      <div class="support-item">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span>
+        <span>アプリの操作、設定</span>
+      </div>
+      <div class="support-item">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3C6.9 3 3 6.4 3 10.6c0 2.4 1.3 4.6 3.4 6-.1 1-.6 2.3-1.6 3.4 1.9-.2 3.6-1 4.8-2 .8.2 1.6.3 2.4.3 5.1 0 9-3.4 9-7.7S17.1 3 12 3z"/><circle cx="8.2" cy="10.6" r="1.2" fill="#158D80"/><circle cx="12" cy="10.6" r="1.2" fill="#158D80"/><circle cx="15.8" cy="10.6" r="1.2" fill="#158D80"/></svg></span>
+        <span>LINE・メール操作、設定</span>
+      </div>
+      <div class="support-item">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19.5a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4zM7.8 14.3a6 6 0 0 1 8.4 0l1.6-1.7a8.3 8.3 0 0 0-11.6 0l1.6 1.7zM4.6 11a10.5 10.5 0 0 1 14.8 0L21 9.3a12.8 12.8 0 0 0-18 0L4.6 11z"/></svg></span>
+        <span>Wi-Fi接続設定のご案内</span>
+      </div>
+      <div class="support-item">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V7.5a5 5 0 0 1 10 0V10h.5A1.5 1.5 0 0 1 19 11.5v8A1.5 1.5 0 0 1 17.5 21h-11A1.5 1.5 0 0 1 5 19.5v-8A1.5 1.5 0 0 1 6.5 10H7zm2 0h6V7.5a3 3 0 1 0-6 0V10z"/></svg></span>
+        <span>セキュリティ</span>
+      </div>
+      <div class="support-item">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8zm9 4.6v-2.4l-2.3-.4a7 7 0 0 0-.8-1.9l1.3-1.9-1.7-1.7-1.9 1.3a7 7 0 0 0-1.9-.8L13.2 3h-2.4l-.4 2.3a7 7 0 0 0-1.9.8L6.6 4.8 4.9 6.5l1.3 1.9a7 7 0 0 0-.8 1.9L3 10.8v2.4l2.3.4c.2.7.5 1.3.8 1.9l-1.3 1.9 1.7 1.7 1.9-1.3c.6.4 1.2.6 1.9.8l.4 2.3h2.4l.4-2.3c.7-.2 1.3-.5 1.9-.8l1.9 1.3 1.7-1.7-1.3-1.9c.4-.6.6-1.2.8-1.9l2.3-.4z"/></svg></span>
+        <span>その他スマートフォン操作に関するご相談　など</span>
+      </div>
+    </div>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <h3>単体契約</h3>
+        <p style="margin:0;"><span class="amount">¥ 660</span><span class="meta">（税込） / 月</span></p>
+      </div>
+      <div class="price-card">
+        <h3>TeolPass+加入者(セット)</h3>
+        <p style="margin:0;"><span class="amount">¥ 330</span><span class="meta">（税込） / 月</span></p>
+      </div>
+    </div>
+    <p class="price-caption">※ Teolリモートサポートの料金です。TeolPass+にご加入の場合はセット価格でご利用いただけます。</p>
+  </div>
+</section>
+
+<!-- ===================== サポートメニュー一覧 ===================== -->
+<section id="menu" class="reveal">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">SUPPORT MENU</span>
+      <h2>サポートメニュー一覧</h2>
+      <p>プランごとのご利用料金は下記のとおりです。</p>
+    </div>
+
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+    <div class="table-scroll">
+      <table class="menu">
+        <thead>
+          <tr>
+            <th class="cat">設定</th>
+            <th class="num">TeolPass+</th>
+            <th class="num">TeolPass</th>
+            <th class="num">都度金額</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>データ移行</td>
+            <td class="num free">無料</td>
+            <td class="num">3,960円 / 回</td>
+            <td class="num">3,960円 / 回</td>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+                <li>フィルム貼り付け</li>
+                <li>端末初期化</li>
+                <li>生体認証設定</li>
+                <li>アカウント設定 ※3</li>
+                <li>メール設定</li>
+                <li>スマホ周辺機器設定</li>
+                <li>パスワードマネージャー設定</li>
+                <li>容量オーバー解消</li>
+                <li>OSアップデート</li>
+                <li>バックアップ</li>
+                <li>スマホ通知整理</li>
+                <li>写真アルバム作成</li>
+                <li>ホーム画面フォルダ作成</li>
+                <li>ICカードの設定（Apple Pay含）</li>
+                <li>各SNS設定 ※3</li>
+              </ul>
+            </td>
+            <td class="num free">無料</td>
+            <td class="num">各 1,100円 / 回</td>
+            <td class="num">各 1,100円 / 回</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-scroll" style="margin-top:24px;">
+      <table class="menu">
+        <thead>
+          <tr>
+            <th class="cat">操作説明</th>
+            <th class="num">TeolPass+</th>
+            <th class="num">TeolPass</th>
+            <th class="num">都度金額</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <ul>
+                <li>天気予報</li>
+                <li>マップ</li>
+                <li>ビデオ通話</li>
+                <li>写真の撮り方、送り方</li>
+                <li>乗り換え案内</li>
+                <li>LINEの使い方</li>
+                <li>SNSの見方や投稿方法</li>
+                <li>スマホでのお支払い（電子決済）</li>
+                <li>ポイントの使い方</li>
+                <li>amazonの使い方</li>
+                <li>ChatGPTの使い方</li>
+                <li>その他分かる範囲での使い方</li>
+              </ul>
+            </td>
+            <td class="num free">無料</td>
+            <td class="num free">無料</td>
+            <td class="num">各 1,100円 / 回</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="table-note">※3 アカウント設定・SNS設定は1アカウントにつき1カウントです。　※表示価格はすべて税込です。</p>
+  </div>
+</section>
+
+<!-- ===================== ご利用方法・対象外 ===================== -->
+<section class="sec-pale reveal">
+  <div class="wrap">
+    <div class="info-grid">
+      <div>
+        <span class="tag-head">ご利用方法</span>
+        <div class="info-box">
+          <p class="big">ご来店時に受付にて<br><b>「TeolPass会員」</b>とお申し出ください。</p>
+        </div>
+
+        <span class="tag-head" style="margin-top:26px;">ご利用可能時間</span>
+        <div class="info-box">
+          <p class="kaisu">原則 1回 / 30分 <small>（1日1回）</small></p>
+          <p class="note">※ 内容によっては後日のご案内となる場合があります。</p>
+        </div>
+      </div>
+
+      <div>
+        <span class="tag-head">対象外サービス</span>
+        <div class="info-box">
+          <ol>
+            <li>各種法令や公序良俗に反するサービス（ギャンブル・アダルト関連等）</li>
+            <li>金融関連商品等、関連法令によってご案内が規制される、またはご案内にあたり資格が必要とされるサービス（オンライン銀行や株取引など金融取引の操作全般を含みます）</li>
+            <li>端末が正常に作動しなくなる可能性のあるサービス</li>
+            <li>第三者による不正利用等のリスクがあると疑われるサービス</li>
+            <li>その他、当社が本サービスの対象として不適格と判断したサービス</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ご利用の流れ ===================== -->
+<section id="flow" class="reveal">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="label">FLOW</span>
+      <h2>ご利用の流れ</h2>
+      <p>お申し込みはかんたん。店舗でもオンラインでも受け付けています。</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><h3>ご相談</h3><p>お困りごとを店頭スタッフにお聞かせください。</p></div>
+      <div class="step"><span class="num">2</span><h3>プランを選ぶ</h3><p>TeolPass・TeolPass+・リモートサポートからお選びいただけます。</p></div>
+      <div class="step"><span class="num">3</span><h3>お申し込み</h3><p>お申し込みページ、または店頭でお手続きいただけます。</p></div>
+      <div class="step"><span class="num">4</span><h3>サポート開始</h3><p>ご来店時に受付で「TeolPass会員」とお申し出ください。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq" class="sec-pale reveal">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="label">FAQ</span>
+      <h2>よくあるご質問</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>Teolは何と読みますか？</summary>
+        <div class="a">「テオル」と読みます。ひらがなでは「ておる」です。スマートフォンの操作・設定・相談を月額制でサポートするサービスの名称です。</div>
+      </details>
+      <details>
+        <summary>申し込みはどこからできますか？</summary>
+        <div class="a">お申し込みページ（<a href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">apply.fm/trust-effort</a>）から、またはお近くの店舗でお手続きいただけます。</div>
+      </details>
+      <details>
+        <summary>TeolPassとTeolPass+の違いは何ですか？</summary>
+        <div class="a">TeolPass（605円/月・税込）は「操作サポート」で、操作説明メニューを無料でご利用いただけます。TeolPass+（1,089円/月・税込）は「操作・設定サポート」で、データ移行を含む設定メニューも無料でご利用いただけます。継続特典の内容も異なります。</div>
+      </details>
+      <details>
+        <summary>1回あたりのサポート時間や回数に制限はありますか？</summary>
+        <div class="a">原則 1回 / 30分（1日1回）です。TeolPass・TeolPass+はご利用回数の制限はありません。内容によっては後日のご案内となる場合があります。</div>
+      </details>
+      <details>
+        <summary>Teolリモートサポートはどんなサポートを受けられますか？</summary>
+        <div class="a">スマートフォンやタブレット等の操作方法や設定について、画面共有等の遠隔サポートを通じてご案内します。基本操作、アプリの操作・設定、LINE・メールの操作・設定、Wi-Fi接続設定のご案内、セキュリティなど、スマートフォン操作に関するご相談に対応しています。</div>
+      </details>
+      <details>
+        <summary>TeolPass+に加入していると、リモートサポートは安くなりますか？</summary>
+        <div class="a">はい。Teolリモートサポートは単体契約で月額660円（税込）ですが、TeolPass+にご加入の場合はセット価格の月額330円（税込）でご利用いただけます。</div>
+      </details>
+      <details>
+        <summary>申し込まずに単発で利用することはできますか？</summary>
+        <div class="a">はい、都度お支払いでご利用いただけます。データ移行は3,960円（税込）、それ以外のサポートは1項目ごとに1,100円（税込）です。アカウント設定・SNS設定は1アカウントにつき1カウントとなります。</div>
+      </details>
+      <details>
+        <summary>プランの変更・解約はできますか？</summary>
+        <div class="a">プランの変更・解約のお手続きについては、店舗スタッフまでご相談ください。</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta reveal">
+  <div class="wrap">
+    <h2>スマホのお困りごとは、<br>Teolにおまかせください。</h2>
+    <p>お申し込みは下のボタンから。ご不明な点は店頭スタッフがご案内します。</p>
+    <a class="btn btn-lg btn-white" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込みページへ進む <span class="arrow">▶</span></a>
+    <small>https://apply.fm/trust-effort/</small>
+  </div>
+</section>
+
+<!-- ===================== 問い合わせ先 ===================== -->
+<section id="contact" class="reveal">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="label">CONTACT</span>
+      <h2>お問い合わせ先</h2>
+      <p>サービス内容・お申し込みについては、お近くの店舗までお気軽にご相談ください。</p>
+    </div>
+
+    <!-- ▼▼▼ 店舗情報 ▼▼▼
+         ・エリアを追加する場合は <div class="area-block"> ごと複製してください。
+         ・店舗を追加する場合は <div class="shop">…</div> を複製してください。
+         ・電話番号は href="tel:0000000000"（ハイフンなし）と表示テキストの両方を修正してください。
+         ・※甲南山手店はご指示により掲載していません。
+    -->
+    <div class="area-block">
+      <h3 class="area-head">大阪エリア</h3>
+      <div class="shops">
+        <div class="shop">
+          <h3>selectSIM かみしんプラザ店</h3>
+          <dl>
+            <dt>電話</dt><dd><a href="tel:0667114450">06-6711-4450</a></dd>
+            <dt>営業時間</dt><dd>10:00〜21:00</dd>
+            <dt>住所</dt><dd>〒533-0015<br>大阪府大阪市東淀川区大隅1-6-12<br>かみしんプラザ 2F</dd>
+          </dl>
+        </div>
+        <div class="shop">
+          <h3>selectSIM 布施店</h3>
+          <dl>
+            <dt>電話</dt><dd><a href="tel:0667829880">06-6782-9880</a></dd>
+            <dt>営業時間</dt><dd>10:00〜19:00</dd>
+            <dt>住所</dt><dd>〒577-0056<br>大阪府東大阪市長堂1-8-37<br>ヴェル・ノール布施 1F</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="area-block">
+      <h3 class="area-head">兵庫エリア</h3>
+      <div class="shops">
+        <div class="shop">
+          <h3>selectSIM 湊川プラザ店</h3>
+          <dl>
+            <dt>電話</dt><dd><a href="tel:0785996180">078-599-6180</a></dd>
+            <dt>営業時間</dt><dd>10:00〜19:00</dd>
+            <dt>住所</dt><dd>〒652-0032<br>兵庫県神戸市兵庫区荒田町2-18-20<br>湊川プラザ 1F</dd>
+          </dl>
+        </div>
+        <div class="shop">
+          <h3>selectSIM アピア逆瀬川店</h3>
+          <dl>
+            <dt>電話</dt><dd><a href="tel:0797617999">0797-61-7999</a></dd>
+            <dt>営業時間</dt><dd>10:00〜19:00</dd>
+            <dt>住所</dt><dd>〒665-0035<br>兵庫県宝塚市逆瀬川1-2-1<br>アピアさかせがわ 1-2F</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- ▲▲▲ 店舗情報ここまで ▲▲▲ -->
+
+    <p class="contact-note">お申し込みはこちらから：<a href="https://apply.fm/trust-effort/" target="_blank" rel="noopener" style="color:var(--teal-dark); font-weight:700;">https://apply.fm/trust-effort/</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top">Teol<span style="color:#6FC7BC">.</span></a>
+    <ul class="fnav">
+      <li><a href="#service">プラン</a></li>
+      <li><a href="#remote">Teolリモートサポート</a></li>
+      <li><a href="#menu">サポートメニュー</a></li>
+      <li><a href="#flow">ご利用の流れ</a></li>
+      <li><a href="#faq">よくあるご質問</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+      <li><a href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込み</a></li>
+    </ul>
+    <small>表示価格はすべて税込です。サービス内容・特典は予告なく変更となる場合があります。<br>特典の詳細や利用条件は店舗スタッフにご確認ください。</small>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <a class="btn btn-primary" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込みはこちら <span class="arrow">▶</span></a>
+</div>
+
+<script>
+(function () {
+  var targets = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(targets, function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>
