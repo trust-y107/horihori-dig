@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://trust-y107.github.io/horihori-dig/sitemap.xml
