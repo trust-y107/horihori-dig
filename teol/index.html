@@ -114,7 +114,7 @@ a{color:inherit;}
   .hero::before{border-width:0 180px 180px 0;}
   .hero .wrap{grid-template-columns:1fr; gap:34px;}
   .hero h1{font-size:54px; text-shadow:4px 4px 0 var(--logo-sh);}
-  .hero h2{font-size:23px;}
+  .hero h2{font-size:23px; line-height:1.45;}
 }
 
 /* ---------- サービス概要バンド（用紙のグレー帯を再現） ---------- */
@@ -306,8 +306,10 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 .mascot-hero{flex:none; display:block; width:152px; line-height:0;}
 .mascot-hero img{width:100%; height:auto;}
 @media(max-width:900px){ .catch-row{gap:12px;} .mascot-hero{width:112px;} }
-@media(max-width:680px){ .catch-row{flex-direction:column; align-items:flex-start; gap:4px;}
-  .mascot-hero{width:124px; margin-left:-6px;} }
+@media(max-width:680px){ .catch-row{gap:10px;} .mascot-hero{width:96px;} }
+@media(max-width:360px){ .catch-row{gap:8px;} .mascot-hero{width:84px;} .hero h2{font-size:20px;} }
+.br-sp{display:none;}
+@media(max-width:680px){ .br-sp{display:inline;} }
 
 /* ---------- スクロール表示アニメーション ---------- */
 .js .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
@@ -469,7 +471,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
           <source srcset="teol-kun.webp" type="image/webp">
           <img src="teol-kun.png" alt="テオルくん" width="360" height="387" decoding="async">
         </picture>
-        <h2>スマホの「わからない」を、<br><em>まるごとサポート。</em></h2>
+        <h2>スマホの<br class="br-sp">「わからない」を、<br><em>まるごとサポート。</em></h2>
       </div>
       <p>基本操作から各種設定、画面共有等による遠隔サポートまで。<br>月額制で、スマートフォンのお困りごとをいつでもご相談いただけます。</p>
       <div class="hero-actions">
