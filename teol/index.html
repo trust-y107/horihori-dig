@@ -95,7 +95,7 @@ a{color:inherit;}
 .hero h1 rt{font-size:15px; font-weight:700; color:var(--teal-dark); letter-spacing:.14em;
   font-family:"Zen Kaku Gothic New",sans-serif; text-shadow:none;}
 .hero .tagline{font-size:14px; font-weight:700; color:var(--teal-dark); margin:0 0 22px; letter-spacing:.14em;}
-.hero h2{font-size:30px; line-height:1.5; margin:0 0 18px; font-weight:900; color:var(--navy);}
+.hero h2{font-size:28px; line-height:1.5; margin:0 0 18px; font-weight:900; color:var(--navy);}
 .hero h2 em{font-style:normal; background:linear-gradient(transparent 62%, #B9E3DC 62%);}
 .hero p{font-size:16px; color:var(--ink-2); margin:0 0 30px;}
 .hero-actions{display:flex; flex-wrap:wrap; gap:14px;}
@@ -301,9 +301,13 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 @media(max-width:980px){ .sticky-cta{display:block;} footer{padding-bottom:110px;} }
 
 /* ---------- マスコット「テオルくん」 ---------- */
-.mascot-hero{display:block; width:190px; margin:26px 0 0; line-height:0;}
+.catch-row{display:flex; align-items:center; gap:16px; margin:0 0 18px;}
+.catch-row h2{margin:0;}
+.mascot-hero{flex:none; display:block; width:152px; line-height:0;}
 .mascot-hero img{width:100%; height:auto;}
-@media(max-width:900px){ .mascot-hero{width:168px; margin:22px auto 0;} }
+@media(max-width:900px){ .catch-row{gap:12px;} .mascot-hero{width:112px;} }
+@media(max-width:680px){ .catch-row{flex-direction:column; align-items:flex-start; gap:4px;}
+  .mascot-hero{width:124px; margin-left:-6px;} }
 
 /* ---------- スクロール表示アニメーション ---------- */
 .js .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
@@ -460,17 +464,19 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <span class="eyebrow">店舗でお取り扱い中のサポートサービス</span>
       <h1><ruby>Teol<rp>（</rp><rt>テオル</rt><rp>）</rp></ruby></h1>
       <p class="tagline">SMARTPHONE SUPPORT SERVICE</p>
-      <h2>スマホの「わからない」を、<br><em>まるごとサポート。</em></h2>
+      <div class="catch-row">
+        <picture class="mascot-hero">
+          <source srcset="teol-kun.webp" type="image/webp">
+          <img src="teol-kun.png" alt="テオルくん" width="360" height="387" decoding="async">
+        </picture>
+        <h2>スマホの「わからない」を、<br><em>まるごとサポート。</em></h2>
+      </div>
       <p>基本操作から各種設定、画面共有等による遠隔サポートまで。<br>月額制で、スマートフォンのお困りごとをいつでもご相談いただけます。</p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href="https://apply.fm/trust-effort/" target="_blank" rel="noopener">お申し込みはこちら <span class="arrow">▶</span></a>
         <a class="btn btn-ghost btn-lg" href="#service">サービスを見る</a>
       </div>
       <p class="hero-note">※ お申し込み・サービス内容の詳細は店頭スタッフまでお気軽にご相談ください。</p>
-      <picture class="mascot-hero">
-        <source srcset="teol-kun.webp" type="image/webp">
-        <img src="teol-kun.png" alt="テオルくん" width="360" height="387" decoding="async">
-      </picture>
     </div>
 
     <div class="hero-card">
