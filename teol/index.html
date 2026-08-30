@@ -24,10 +24,10 @@
 <meta name="twitter:image" content="https://teol-4uo.pages.dev/ogp.png">
 <meta name="twitter:title" content="Teol（テオル）｜スマホの操作・設定サポート">
 <meta name="twitter:description" content="月額制でスマートフォンの操作・設定・相談をサポート。TeolPass／TeolPass+／Teolリモートサポート。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23158D80'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='40' font-weight='bold' fill='%23fff' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C4A61'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='40' font-weight='bold' fill='%23fff' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    Teol ランディングページ
@@ -39,6 +39,8 @@
   --teal-mid:#1AA091;
   --teal-light:#E4F2EF;  /* カード背景 */
   --teal-pale:#F3F9F8;   /* セクション背景 */
+  --logo:#2C4A61;        /* ロゴのネイビー */
+  --logo-sh:#A5DFD7;     /* ロゴの影（ミント） */
   --navy:#2A323A;        /* 見出し帯・フッター */
   --navy-2:#3C4650;
   --ink:#2E353B;
@@ -66,8 +68,7 @@ a{color:inherit;}
 /* ---------- ヘッダー ---------- */
 .site-header{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.94); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
 .site-header .wrap{display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px;}
-.logo{font-family:"Zen Maru Gothic","Zen Kaku Gothic New",sans-serif; font-weight:900; font-size:26px; letter-spacing:.04em; color:var(--navy); text-decoration:none; line-height:1;}
-.logo span{color:var(--teal);}
+.logo{font-family:"M PLUS Rounded 1c","Rounded Mplus 1c ExtraBold","Zen Maru Gothic",sans-serif; font-weight:800; font-size:26px; letter-spacing:.02em; color:var(--logo); text-decoration:none; line-height:1; text-shadow:2px 2px 0 var(--logo-sh);}
 .nav{display:flex; align-items:center; gap:22px;}
 .nav .nav-link{font-size:14px; font-weight:700; text-decoration:none; color:var(--ink-2);}
 .nav .nav-link:hover{color:var(--teal-dark);}
@@ -89,9 +90,10 @@ a{color:inherit;}
 .hero::after{content:""; position:absolute; width:320px; height:320px; border-radius:50%; background:var(--teal-light); bottom:-130px; left:-110px;}
 .hero .wrap{position:relative; z-index:1; display:grid; grid-template-columns:1.12fr .88fr; gap:48px; align-items:center;}
 .eyebrow{display:inline-block; background:var(--white); color:var(--teal-dark); font-size:13px; font-weight:700; padding:7px 16px; border-radius:6px; box-shadow:var(--shadow); margin-bottom:22px;}
-.hero h1 rt{font-size:15px; font-weight:700; color:var(--teal-dark); letter-spacing:.14em; font-family:"Zen Kaku Gothic New",sans-serif;}
-.hero h1{font-family:"Zen Maru Gothic",sans-serif; font-size:64px; line-height:1.1; margin:0 0 8px; letter-spacing:.02em; color:var(--teal);}
-.hero h1 .dot{color:var(--navy);}
+.hero h1{font-family:"M PLUS Rounded 1c","Rounded Mplus 1c ExtraBold","Zen Maru Gothic",sans-serif; font-size:72px; font-weight:800; line-height:1.15; margin:0 0 10px;
+  letter-spacing:.01em; color:var(--logo); text-shadow:5px 5px 0 var(--logo-sh);}
+.hero h1 rt{font-size:15px; font-weight:700; color:var(--teal-dark); letter-spacing:.14em;
+  font-family:"Zen Kaku Gothic New",sans-serif; text-shadow:none;}
 .hero .tagline{font-size:14px; font-weight:700; color:var(--teal-dark); margin:0 0 22px; letter-spacing:.14em;}
 .hero h2{font-size:30px; line-height:1.5; margin:0 0 18px; font-weight:900; color:var(--navy);}
 .hero h2 em{font-style:normal; background:linear-gradient(transparent 62%, #B9E3DC 62%);}
@@ -111,7 +113,7 @@ a{color:inherit;}
   .hero{padding:52px 0 62px;}
   .hero::before{border-width:0 180px 180px 0;}
   .hero .wrap{grid-template-columns:1fr; gap:34px;}
-  .hero h1{font-size:50px;}
+  .hero h1{font-size:54px; text-shadow:4px 4px 0 var(--logo-sh);}
   .hero h2{font-size:23px;}
 }
 
@@ -287,7 +289,7 @@ table.menu tr:last-child td{border-bottom:none;}
 
 /* ---------- フッター ---------- */
 footer{background:var(--navy); color:#fff; padding:44px 0 96px; text-align:center;}
-footer .logo{color:#fff; display:inline-block; margin-bottom:14px;}
+footer .logo{color:#fff; display:inline-block; margin-bottom:14px; text-shadow:2px 2px 0 rgba(165,223,215,.85);}
 footer .fnav{display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:center; margin:0 0 20px; padding:0; list-style:none; font-size:14px;}
 footer .fnav a{color:#fff; opacity:.82; text-decoration:none;}
 footer .fnav a:hover{opacity:1;}
@@ -433,7 +435,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="#top">Teol<span>.</span></a>
+    <a class="logo" href="#top">Teol</a>
     <nav class="nav">
       <a class="nav-link" href="#service">サービス</a>
       <a class="nav-link" href="#remote">リモートサポート</a>
@@ -450,7 +452,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
   <div class="wrap">
     <div>
       <span class="eyebrow">店舗でお取り扱い中のサポートサービス</span>
-      <h1><ruby>Teol<rp>（</rp><rt>テオル</rt><rp>）</rp></ruby><span class="dot">.</span></h1>
+      <h1><ruby>Teol<rp>（</rp><rt>テオル</rt><rp>）</rp></ruby></h1>
       <p class="tagline">SMARTPHONE SUPPORT SERVICE</p>
       <h2>スマホの「わからない」を、<br><em>まるごとサポート。</em></h2>
       <p>基本操作から各種設定、画面共有等による遠隔サポートまで。<br>月額制で、スマートフォンのお困りごとをいつでもご相談いただけます。</p>
@@ -913,7 +915,7 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#top">Teol<span style="color:#6FC7BC">.</span></a>
+    <a class="logo" href="#top">Teol</a>
     <ul class="fnav">
       <li><a href="#service">プラン</a></li>
       <li><a href="#remote">Teolリモートサポート</a></li>
