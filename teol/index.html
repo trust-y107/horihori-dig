@@ -134,7 +134,9 @@ section{padding:84px 0;}
 /* ---------- お悩み ---------- */
 .worry-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
 .worry{background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:26px 22px; text-align:center;}
-.worry .face{font-size:34px; line-height:1; margin-bottom:12px;}
+.worry .ic{width:58px; height:58px; border-radius:50%; background:var(--teal-light); display:flex; align-items:center; justify-content:center; margin:0 auto 14px;}
+.worry .ic svg{width:30px; height:30px; fill:none; stroke:var(--teal); stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
+.worry .ic svg .dot{fill:var(--teal); stroke:none;}
 .worry p{margin:0; font-size:15.5px; font-weight:700; line-height:1.65;}
 .worry-lead{margin:40px auto 0; max-width:780px; text-align:center; background:var(--teal); color:#fff; border-radius:var(--radius); padding:22px 24px; font-size:19px; font-weight:700; position:relative;}
 .worry-lead::before{content:""; position:absolute; top:-14px; left:50%; transform:translateX(-50%); border:14px solid transparent; border-bottom-color:var(--teal); border-top:0;}
@@ -416,12 +418,30 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <h2>スマホのこと、<br class="sp-br">こんなお困りごとはありませんか？</h2>
     </div>
     <div class="worry-grid">
-      <div class="worry"><div class="face">🤔</div><p>操作の仕方が<br>よくわからない</p></div>
-      <div class="worry"><div class="face">📱</div><p>アプリの入れ方・<br>使い方を教えてほしい</p></div>
-      <div class="worry"><div class="face">💬</div><p>LINEやメールの<br>設定でつまずく</p></div>
-      <div class="worry"><div class="face">🔄</div><p>機種変更のデータ移行が<br>不安</p></div>
-      <div class="worry"><div class="face">🔒</div><p>セキュリティが<br>不安になる</p></div>
-      <div class="worry"><div class="face">🏃</div><p>そのたびに店舗へ<br>行くのが大変</p></div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.4"/><path d="M10.1 8.6a1.95 1.95 0 1 1 2.7 1.85c-.55.25-.85.72-.85 1.3v.35"/><circle class="dot" cx="11.95" cy="15.1" r="1"/></svg></span>
+        <p>操作の仕方が<br>よくわからない</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.2" y="3.2" width="7.6" height="7.6" rx="1.8"/><rect x="13.2" y="3.2" width="7.6" height="7.6" rx="1.8"/><rect x="3.2" y="13.2" width="7.6" height="7.6" rx="1.8"/><rect x="13.2" y="13.2" width="7.6" height="7.6" rx="1.8"/></svg></span>
+        <p>アプリの入れ方・<br>使い方を教えてほしい</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 11.4c0 4.4-3.9 7.9-8.8 7.9-.9 0-1.7-.1-2.5-.3L4.2 21l1.4-4.1a7.6 7.6 0 0 1-2.4-5.5c0-4.4 4-7.9 8.8-7.9s8.8 3.5 8.8 7.9z"/><circle class="dot" cx="8.4" cy="11.3" r="1.15"/><circle class="dot" cx="12" cy="11.3" r="1.15"/><circle class="dot" cx="15.6" cy="11.3" r="1.15"/></svg></span>
+        <p>LINEやメールの<br>設定でつまずく</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.6 9h15.2"/><path d="M16.2 6.2 19 9l-2.8 2.8"/><path d="M20.4 15H5.2"/><path d="M7.8 12.2 5 15l2.8 2.8"/></svg></span>
+        <p>機種変更のデータ移行が<br>不安</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.8 4.6 5.9v5.4c0 4.5 3 7.9 7.4 9.4 4.4-1.5 7.4-4.9 7.4-9.4V5.9L12 2.8z"/><path d="M9 11.9l2.2 2.2 4-4.2"/></svg></span>
+        <p>セキュリティが<br>不安になる</p>
+      </div>
+      <div class="worry">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.6 6.6 4.1 3h15.8l1.5 3.6a3 3 0 0 1-5.8 1 3 3 0 0 1-5.4 0 3 3 0 0 1-5.8-1z"/><path d="M4.2 10.6V21h15.6V10.6"/><path d="M2.8 21h18.4"/><path d="M9.8 21v-5.6h4.4V21"/></svg></span>
+        <p>そのたびに店舗へ<br>行くのが大変</p>
+      </div>
     </div>
     <p class="worry-lead">その「困った」、Teolがまるごとサポートします。</p>
   </div>
