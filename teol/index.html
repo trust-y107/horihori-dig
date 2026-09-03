@@ -287,7 +287,7 @@ table.menu tr:last-child td{border-bottom:none;}
 .shop{background:#fff; border:2px solid var(--line); border-radius:var(--radius); padding:24px; transition:border-color .2s ease;}
 .shop:hover{border-color:var(--teal);}
 .shop-photo{margin:-24px -24px 18px; border-radius:9px 9px 0 0; overflow:hidden;
-  aspect-ratio:16/9; background:var(--teal-pale);}
+  aspect-ratio:671/427; background:var(--teal-pale);}
 .shop-photo img{width:100%; height:100%; object-fit:cover; display:block;}
 .shop h3{font-size:19px; margin:0 0 14px; display:flex; align-items:center; gap:9px; color:var(--navy); line-height:1.4;}
 .shop h3::before{content:""; flex:none; width:7px; height:22px; background:var(--teal);}
@@ -900,8 +900,12 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <div class="shops">
         <div class="shop">
           <div class="shop-photo">
-            <img src="shop-kamishin.jpg" alt="selectSIM かみしんプラザ店の店舗の様子" loading="lazy" decoding="async"
-                 onerror="this.parentNode.remove()">
+            <picture>
+              <source srcset="shop-kamishin.webp" type="image/webp">
+              <img src="shop-kamishin.jpg" alt="selectSIM かみしんプラザ店の店舗の様子" width="671" height="427"
+                   loading="lazy" decoding="async"
+                   onerror="this.closest('.shop-photo').remove()">
+            </picture>
           </div>
           <h3>selectSIM かみしんプラザ店</h3>
           <dl>
@@ -912,8 +916,12 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
         </div>
         <div class="shop">
           <div class="shop-photo">
-            <img src="shop-fuse.jpg" alt="selectSIM 布施店の店舗の様子" loading="lazy" decoding="async"
-                 onerror="this.parentNode.remove()">
+            <picture>
+              <source srcset="shop-fuse.webp" type="image/webp">
+              <img src="shop-fuse.jpg" alt="selectSIM 布施店の店舗の様子" width="671" height="427"
+                   loading="lazy" decoding="async"
+                   onerror="this.closest('.shop-photo').remove()">
+            </picture>
           </div>
           <h3>selectSIM 布施店</h3>
           <dl>
@@ -930,8 +938,12 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
       <div class="shops">
         <div class="shop">
           <div class="shop-photo">
-            <img src="shop-minatogawa.jpg" alt="selectSIM 湊川プラザ店の店舗の様子" loading="lazy" decoding="async"
-                 onerror="this.parentNode.remove()">
+            <picture>
+              <source srcset="shop-minatogawa.webp" type="image/webp">
+              <img src="shop-minatogawa.jpg" alt="selectSIM 湊川プラザ店の店舗の様子" width="671" height="427"
+                   loading="lazy" decoding="async"
+                   onerror="this.closest('.shop-photo').remove()">
+            </picture>
           </div>
           <h3>selectSIM 湊川プラザ店</h3>
           <dl>
@@ -942,8 +954,12 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
         </div>
         <div class="shop">
           <div class="shop-photo">
-            <img src="shop-apia.jpg" alt="selectSIM アピア逆瀬川店の店舗の様子" loading="lazy" decoding="async"
-                 onerror="this.parentNode.remove()">
+            <picture>
+              <source srcset="shop-apia.webp" type="image/webp">
+              <img src="shop-apia.jpg" alt="selectSIM アピア逆瀬川店の店舗の様子" width="671" height="427"
+                   loading="lazy" decoding="async"
+                   onerror="this.closest('.shop-photo').remove()">
+            </picture>
           </div>
           <h3>selectSIM アピア逆瀬川店</h3>
           <dl>
