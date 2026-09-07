@@ -1,0 +1,2 @@
+# 旧URL（Cloudflare Pages の既定ドメイン）から独自ドメインへ集約
+https://teol-4uo.pages.dev/* https://te-teol.jp/:splat 301
