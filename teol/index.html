@@ -303,6 +303,10 @@ table.menu tr:last-child td{border-bottom:none;}
 .shop-photo{margin:-24px -24px 18px; border-radius:9px 9px 0 0; overflow:hidden;
   aspect-ratio:671/427; background:var(--teal-pale);}
 .shop-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+.shop-photo.is-placeholder{display:flex; align-items:center; justify-content:center;
+  background:#E9ECEE; border-bottom:1px solid var(--line);}
+.shop-photo.is-placeholder svg{width:64px; height:64px; fill:none; stroke:#AEB7BC;
+  stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round;}
 .shop h3{font-size:19px; margin:0 0 14px; display:flex; align-items:center; gap:9px; color:var(--navy); line-height:1.4;}
 .shop h3::before{content:""; flex:none; width:7px; height:22px; background:var(--teal);}
 .shop dl{margin:0; display:grid; grid-template-columns:78px 1fr; gap:9px 12px; font-size:14.5px;}
@@ -955,13 +959,12 @@ footer small{display:block; font-size:12.5px; opacity:.66; line-height:1.9;}
           </dl>
         </div>
         <div class="shop">
-          <div class="shop-photo">
-            <picture>
-              <source srcset="shop-wakaeiwata.webp" type="image/webp">
-              <img src="shop-wakaeiwata.jpg" alt="selectSIM 若江岩田店の店舗の様子" width="671" height="427"
-                   loading="lazy" decoding="async"
-                   onerror="this.closest('.shop-photo').remove()">
-            </picture>
+          <div class="shop-photo is-placeholder" role="img" aria-label="selectSIM 若江岩田店（店舗写真は準備中）">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2.6 6.6 4.1 3h15.8l1.5 3.6a3 3 0 0 1-5.8 1 3 3 0 0 1-5.4 0 3 3 0 0 1-5.8-1z"/>
+              <path d="M4.2 10.6V21h15.6V10.6"/><path d="M2.8 21h18.4"/>
+              <path d="M9.8 21v-5.6h4.4V21"/>
+            </svg>
           </div>
           <h3>selectSIM 若江岩田店</h3>
           <dl>
